@@ -1,0 +1,31 @@
+<?php
+
+use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\VendorRegistrationController;
+
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');
+
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+Route::get('/homestaurant-application', [VendorRegistrationController::class, 'showRegistrationForm'])->name('homestaurant.application')->middleware(['auth', 'verified', 'homestaurant']);
+
+Route::post('/location-filter', [LocationController::class, 'storeOrUpdateLocation'])->name('store-location');
+Route::get('/nearby-homestaurants', [LocationController::class, 'index'])->name('nearby.homestaurants');
+
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::redirect('settings', 'settings/profile');
+
+    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
+    Volt::route('settings/password', 'settings.password')->name('settings.password');
+    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+});
+
+require __DIR__.'/auth.php';
