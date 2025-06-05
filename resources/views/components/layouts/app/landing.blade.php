@@ -56,6 +56,12 @@
                             @auth('web')
                                 <x-dropdown-link
                                     href="{{ route('settings.profile') }}">{{ __('Profile') }}</x-dropdown-link>
+                                @if (auth()->user()->user_type === 2 && optional(auth()->user()->vendorApplication)->is_approved === 1)
+                                    <x-dropdown-link
+                                        href="{{ route('dashboard') }}">{{ __('Homestaurant Dashboard') }}</x-dropdown-link>
+                                @elseif (auth()->user()->user_type === 2)
+                                    <x-dropdown-link href="{{route('homestaurant.application')}}">{{ __('Application Form') }}</x-dropdown-link>
+                                @endif
                             @else
                                 <x-dropdown-link href="{{ route('login') }}">{{ __('Login') }}</x-dropdown-link>
                                 <x-dropdown-link href="{{ route('register') }}">{{ __('Register') }}</x-dropdown-link>

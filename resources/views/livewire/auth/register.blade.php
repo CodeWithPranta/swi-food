@@ -62,7 +62,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <flux:radio.group wire:model="user_type" label="Role">
             <flux:radio value="1" label="General user"
                 description="General users can regular purchasing and browsing." checked />
-            <flux:radio value="4" label="Homestaurant owner"
+            <flux:radio value="2" label="Homestaurant owner"
                 description="Homestaurant owners can set up and sell homemade food with full user features." />
         </flux:radio.group>
 
