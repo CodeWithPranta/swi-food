@@ -20,7 +20,7 @@ class FooterSection extends Component
         $this->pages = $pages;
         $setting = \App\Models\Setting::first();
         $this->favicon = $setting?->favicon;
-        $this->copyrightText = $setting?->copyright_text ?? '© 2025 Homestaurant. All rights reserved.';
+        $this->copyrightText = $setting?->copyright_text ?? '2025 Homestaurant. All rights reserved.';
     }
 
     /**

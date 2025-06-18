@@ -23,8 +23,8 @@ class HeroSection extends Component
     ) {
         $setting = \App\Models\Setting::first();
         $this->heroBackground = $setting?->hero_background;
-        $this->searchBtnTitle = $setting?->search_btn_title ?? 'Find Homestaurants';
-        $this->heroTitle = $setting?->hero_title ?? 'Missing Home Food?';
+        $this->searchBtnTitle = $setting?->search_btn_title ?? 'Find homestaurants';
+        $this->heroTitle = $setting?->hero_title ?? 'Missing home food?';
         $this->titleText = $setting?->title_text ?? 'Type and select address..';
 
         $this->location = $location;

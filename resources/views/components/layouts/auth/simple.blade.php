@@ -3,6 +3,11 @@
 
 <head>
     @include('partials.head')
+    <style>
+        .rounded-lg {
+            border-radius: 1.5rem !important;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen antialiased">

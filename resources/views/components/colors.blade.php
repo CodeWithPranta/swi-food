@@ -29,4 +29,5 @@
             color: {{ $hoverTextColor }} !important;
         }
     @endif
+
 </style>

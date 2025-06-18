@@ -40,7 +40,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $user = Auth::user(); // ✅ Fetch the authenticated user
+
+        if ($user->user_type == 2 && optional($user->vendorApplication)->is_approved != 1) {
+            $this->redirect(route('homestaurant.application'), navigate: true);
+        } else {
+            $this->redirectIntended(route('landing', absolute: false), navigate: true);
+        }
     }
 
     /**
@@ -87,7 +93,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- Password -->
         <div class="relative">
             <flux:input wire:model="password" :label="__('Password')" type="password" required
-                autocomplete="current-password" :placeholder="__('Password')" />
+                autocomplete="current-password" :placeholder="__('Password')" class="rounded-full" />
 
             @if (Route::has('password.request'))
                 <flux:link class="absolute right-0 top-0 text-sm" :href="route('password.request')" wire:navigate>

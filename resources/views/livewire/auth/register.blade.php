@@ -38,7 +38,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         if ($user->user_type == 2) {
             $this->redirect(route('homestaurant.application'), navigate: true);
         } else {
-            $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(route('landing', absolute: false), navigate: true);
         }
     }
 }; ?>

@@ -49,7 +49,7 @@
                                 @auth
                                     {{ auth()->user()->name }}
                                 @else
-                                    {{ __('Login & Registration Area') }}
+                                    {{ __('Login & registration area') }}
                                 @endauth
                             </x-slot>
 
