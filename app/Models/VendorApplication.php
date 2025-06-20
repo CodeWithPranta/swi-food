@@ -21,6 +21,7 @@ class VendorApplication extends Model
         'location',          // Address field
         'latitude',         // Latitude for location
         'longitude',        // Longitude for location
+        'is_approved',    // Approval status (default false)
     ];
 
     protected $casts = [

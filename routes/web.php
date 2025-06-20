@@ -12,6 +12,8 @@ Route::get('/home', function () {
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/homestaurant-application', [VendorRegistrationController::class, 'showRegistrationForm'])->name('homestaurant.application')->middleware(['auth', 'verified', 'homestaurant']);
+Route::post('/homestaurant-application', [VendorRegistrationController::class, 'submitRegistrationForm'])->name('homestaurant.application.submit')->middleware(['auth', 'verified', 'homestaurant']);
+Route::get('/apply/thank-you', [VendorRegistrationController::class, 'thankYou'])->name('homestaurant.application.thankyou')->middleware(['auth', 'verified', 'homestaurant']);
 
 Route::post('/location-filter', [LocationController::class, 'storeOrUpdateLocation'])->name('store-location');
 Route::get('/nearby-homestaurants', [LocationController::class, 'index'])->name('nearby.homestaurants');

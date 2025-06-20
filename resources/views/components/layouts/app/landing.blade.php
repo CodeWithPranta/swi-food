@@ -58,7 +58,7 @@
                                     href="{{ route('settings.profile') }}">{{ __('Profile') }}</x-dropdown-link>
                                 @if (auth()->user()->user_type === 2 && optional(auth()->user()->vendorApplication)->is_approved === 1)
                                     <x-dropdown-link
-                                        href="{{ route('dashboard') }}">{{ __('Homestaurant Dashboard') }}</x-dropdown-link>
+                                        href="{{ route('filament.vendor.pages.dashboard') }}">{{ __('Homestaurant Dashboard') }}</x-dropdown-link>
                                 @elseif (auth()->user()->user_type === 2)
                                     <x-dropdown-link href="{{route('homestaurant.application')}}">{{ __('Application Form') }}</x-dropdown-link>
                                 @endif

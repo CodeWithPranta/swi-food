@@ -10,6 +10,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -56,6 +57,16 @@ class Settings extends Page implements HasForms
                         ->required(),
                     FileUpload::make('logo')
                         ->label('Logo (max. 200*60)px')
+                        ->image()
+                        ->imageEditor()
+                        ->imageEditorAspectRatios([
+                            '16:9',
+                            '4:3',
+                            '1:1',
+                        ])
+                        ->required(),
+                    FileUpload::make('secondary_logo')
+                        ->label('Logo for white screen (max. 200*60)px')
                         ->image()
                         ->imageEditor()
                         ->imageEditorAspectRatios([
@@ -185,6 +196,20 @@ class Settings extends Page implements HasForms
                            ->columnSpan(2)->required(),
                        ]),
                     Textarea::make('copyright_text')->columnSpan(2)->required(),
+                    Repeater::make('social_links')
+                        ->label('Social Links')
+                        ->schema([
+                            Textarea::make('svg')
+                                ->label('Social Media SVG Icon')
+                                ->required(),
+                            TextInput::make('url')
+                                ->label('Social Media URL')
+                                ->url()
+                                ->required(),
+                        ])
+                        ->columns(2)
+                        ->defaultItems(1)
+                        ->columnSpanFull(),
                 ]),
             ])
             ->statePath('data');

@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 py-8">
         <h2 class="text-2xl pt-15 text-center font-medium mb-6 text-zinc-800">{{ __('Apply to open a homestaurant') }}</h2>
 
-        <form method="POST" action="" enctype="multipart/form-data" class="max-w-lg mx-auto p-6">
+        <form method="POST" action="{{ route('homestaurant.application.submit') }}" enctype="multipart/form-data" class="max-w-lg mx-auto p-6">
             @csrf
 
             <div class="mb-4">

@@ -14,6 +14,7 @@ class FooterSection extends Component
     public ?string $copyrightText;
     public ?string $favicon;
     public ?object $pages;
+    public ?array $socialLinks;
     public function __construct()
     {
         $pages = \App\Models\Page::all();
@@ -21,6 +22,7 @@ class FooterSection extends Component
         $setting = \App\Models\Setting::first();
         $this->favicon = $setting?->favicon;
         $this->copyrightText = $setting?->copyright_text ?? '2025 Homestaurant. All rights reserved.';
+        $this->socialLinks = $setting?->social_links ?? [];
     }
 
     /**

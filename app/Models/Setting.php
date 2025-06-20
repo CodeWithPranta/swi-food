@@ -28,5 +28,11 @@ class Setting extends Model
         'menu_card_bg_image',
         'hover_bg_color',
         'hover_text_color',
+        'secondary_logo',
+        'social_links',
+    ];
+
+    protected $casts = [
+        'social_links' => 'array',
     ];
 }

@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\VendorApplication;
 use App\Models\Profession;
+use Illuminate\Support\Facades\Auth;
 
 class VendorRegistrationController extends Controller
 {
     public function showRegistrationForm()
     {
+        $user = Auth::user();
+        if ($user->vendorApplication) {
+            return redirect()->route('homestaurant.application.thankyou');
+        }
+
         $professions = Profession::all();
         return view('homestaurant.application', compact('professions'));
     }
@@ -57,6 +63,11 @@ class VendorRegistrationController extends Controller
             'is_approved' => 0,
         ]);
 
-        return redirect()->back()->with('success', 'Your application has been submitted!');
+        return redirect()->route('homestaurant.application.thankyou')->with('status', 'submitted');
+    }
+
+    public function thankYou()
+    {
+        return view('homestaurant.thankyou');
     }
 }
