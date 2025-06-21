@@ -16,4 +16,10 @@ class ListVendorApplications extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    public function getBreadcrumbs(): array
+    {
+        // Return empty array to remove breadcrumbs
+        return [];
+    }
 }

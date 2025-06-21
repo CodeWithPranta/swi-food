@@ -12,9 +12,32 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
+use Illuminate\Support\Facades\Auth;
 
 class VendorApplicationResource extends Resource
 {
+    public static function getPluralLabel(): string
+    {
+        return 'Application';
+    }
+
+    public static function getLabel(): string
+    {
+        return 'Application';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('user_id', Auth::id()); // Only show logged-in vendor's application
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     protected static ?string $model = VendorApplication::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-badge';
@@ -23,38 +46,86 @@ class VendorApplicationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
+                Forms\Components\TextInput::make('user_id')
+                    ->default(fn () => auth()->id())
+                    ->readOnly()
                     ->required(),
                 Forms\Components\TextInput::make('kitchen_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('cover_photo')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('chef_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('attachments')
+                    ->unique(ignoreRecord: true)
+                    ->readOnly(fn ($record) => $record?->exists)
                     ->required(),
-                Forms\Components\TextInput::make('latitude')
-                    ->numeric(),
-                Forms\Components\TextInput::make('longitude')
-                    ->numeric(),
+                Forms\Components\FileUpload::make('cover_photo')
+                    ->required()
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ]),
+                Forms\Components\TextInput::make('chef_name')
+                    ->required(),
+
                 Forms\Components\Select::make('profession_id')
                     ->relationship('profession', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
+                    ->unique(ignoreRecord: true)
+                    ->required(),
+                Forms\Components\RichEditor::make('description')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('links'),
-                Forms\Components\TextInput::make('location')
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('is_approved')
-                    ->required(),
+
+                Forms\Components\Fieldset::make('Location Details')
+                    ->schema([
+                    Geocomplete::make('address')
+                        ->isLocation()
+                        ->geocodeOnLoad()
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            if (!empty($state)) { // Ensure $state is not null
+                                $set('latitude', $state['lat'] ?? null);
+                                $set('longitude', $state['lng'] ?? null);
+                                $set('location', $state['formatted_address'] ?? null);
+                            }
+                        }),
+
+                    Forms\Components\TextInput::make('latitude')
+                        ->required()
+                        ->readOnly()
+                        ->reactive(),
+
+                    Forms\Components\TextInput::make('longitude')
+                        ->required()
+                        ->readOnly()
+                        ->reactive(),
+
+                    Forms\Components\TextInput::make('location') // Ensure address is updated correctly
+                        ->label('Location')
+                        ->required(),
+                                    ])
+                    ->columnSpan('full'),
+                    Forms\Components\FileUpload::make('attachments')
+                        ->multiple()
+                        ->disabled()
+                        ->required()
+                        ->label('Identity Verifiacation Photos')
+                        ->columnSpanFull()
+                        ->storeFileNamesIn('attachment_file_names'),
+
+                    Forms\Components\Repeater::make('links')
+                        ->schema([
+                            Forms\Components\TextInput::make('site_name')->required(),
+                            Forms\Components\TextInput::make('link')->required()
+                        ])
+                        ->columnSpanFull(),
+                    Forms\Components\Section::make('Status')->schema([
+                        Forms\Components\Toggle::make('is_approved')
+                            ->label('Approval')
+                            ->disabled()
+                            ->helperText('Whether or not the vendor is approved by admin.')
+                            ->default(false),
+                    ]),
             ]);
     }
 
@@ -62,26 +133,8 @@ class VendorApplicationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('kitchen_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cover_photo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('chef_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('latitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('longitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('profession.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('phone_number')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('kitchen_name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -90,8 +143,7 @@ class VendorApplicationResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('location'),
                 Tables\Columns\IconColumn::make('is_approved')
                     ->boolean(),
             ])
@@ -105,7 +157,9 @@ class VendorApplicationResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            
+            ])
+            ->paginated(false);
     }
 
     public static function getRelations(): array
@@ -119,8 +173,8 @@ class VendorApplicationResource extends Resource
     {
         return [
             'index' => Pages\ListVendorApplications::route('/'),
-            'create' => Pages\CreateVendorApplication::route('/create'),
             'edit' => Pages\EditVendorApplication::route('/{record}/edit'),
         ];
     }
+
 }

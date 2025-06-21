@@ -36,6 +36,7 @@ class VendorApplicationResource extends Resource
                     ->preload()
                     ->required(),
                 Forms\Components\TextInput::make('kitchen_name')
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 FileUpload::make('cover_photo')
                     ->required()
@@ -54,6 +55,7 @@ class VendorApplicationResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 Forms\Components\RichEditor::make('description')
                     ->required()

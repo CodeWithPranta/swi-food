@@ -24,7 +24,7 @@ class VendorRegistrationController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'kitchen_name' => 'required|string|max:255',
+            'kitchen_name' => 'unique|required|string|max:255',
             'chef_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
             'description' => 'required|string',
