@@ -7,7 +7,7 @@
 
             <div class="mb-4">
                 <label for="kitchen_name" class="block text-sm font-medium text-zinc-800">{{ __('Homestaurant Name') }}</label>
-                <input type="text" name="kitchen_name" placeholder="e.g. More Momo" id="kitchen_name" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
+                <input type="text"  name="kitchen_name" value="{{ old('kitchen_name') }}" placeholder="e.g. More Momo" id="kitchen_name" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
                 @error('kitchen_name')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -15,7 +15,7 @@
 
             <div class="mb-4">
                 <label for="chef_name" class="block text-sm font-medium text-zinc-800">{{ __('Chef Name') }}</label>
-                <input type="text" name="chef_name" id="chef_name" placeholder="e.g. Emma" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
+                <input type="text" name="chef_name" value="{{ old('chef_name') }}" id="chef_name" placeholder="e.g. Emma" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
                 @error('chef_name')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -26,7 +26,7 @@
                 <select name="profession_id" id="profession_id" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
                     <option value="">{{ __('Select Profession') }}</option>
                     @foreach($professions as $profession)
-                        <option value="{{ $profession->id }}">{{ $profession->name }}</option>
+                        <option value="{{ $profession->id }}" {{ old('profession_id') == $profession->id ? 'selected' : '' }}>{{ $profession->name }}</option>
                     @endforeach
                 </select>
                 @error('profession_id')
@@ -36,7 +36,7 @@
 
             <div class="mb-4">
                 <label for="phone_number" class="block text-sm font-medium text-zinc-800">{{ __('Phone Number') }}</label>
-                <input type="text" name="phone_number" placeholder="e.g. +41 43 123 45 67" id="phone_number" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
+                <input type="text" name="phone_number" value="{{ old('phone_number') }}" placeholder="e.g. +41 43 123 45 67" id="phone_number" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
                 @error('phone_number')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -44,7 +44,9 @@
 
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">{{ __('Description') }}</label>
-                <textarea name="description" placeholder="Write short description on your kitchen and journey..." id="description" rows="4" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-4xl shadow-sm focus:border-gray-800 focus:ring-gray-800"></textarea>
+                <textarea name="description" placeholder="Write short description on your kitchen and journey..." id="description" rows="4" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-4xl shadow-sm focus:border-gray-800 focus:ring-gray-800">
+                    {{ old('description') }}
+                </textarea>
                 @error('description')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -52,13 +54,13 @@
 
             <div class="mb-4">
                 <label for="location" class="block text-sm font-medium text-zinc-800">{{ __('Your Location') }}</label>
-                <input type="text" name="location" id="location" placeholder="Type & select from the suggestions"
+                <input type="text" name="location" value="{{ old('location') }}" id="location" placeholder="Type & select from the suggestions"
                     class="mt-1 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800" required>
                 @error('location') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <input type="hidden" name="latitude" id="latitude">
-            <input type="hidden" name="longitude" id="longitude">
+            <input type="hidden" name="latitude" value="{{ old('latitude') }}" id="latitude">
+            <input type="hidden" name="longitude" value="{{ old('longitude') }}" id="longitude">
 
             <div class="mb-4">
                 <label for="cover_photo" class="block text-sm font-medium text-zinc-800">{{ __('Cover Photo') }}</label>

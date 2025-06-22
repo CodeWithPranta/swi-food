@@ -98,7 +98,7 @@ class VendorApplicationResource extends Resource
 
                     Repeater::make('links')
                         ->schema([
-                            TextInput::make('site_name')->required(),
+                            Textarea::make('svg')->label('SVG icon')->required(),
                             TextInput::make('link')->required()
                         ])
                         ->columnSpanFull(),

@@ -24,12 +24,15 @@ class VendorRegistrationController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'kitchen_name' => 'unique|required|string|max:255',
+            'kitchen_name' => 'unique:vendor_applications,kitchen_name|required|string|max:255',
             'chef_name' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
+            'phone_number' => 'unique:vendor_applications,phone_number|required|string|max:20',
             'description' => 'required|string',
             'cover_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'attachments.*' => 'file|max:4096',
+            // ✅ Require the array
+            'attachments' => 'required|array',
+            // ✅ Validate each file inside the array
+            'attachments.*' => 'required|file|max:4096',
             'location' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',

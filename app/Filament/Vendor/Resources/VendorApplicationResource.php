@@ -115,7 +115,8 @@ class VendorApplicationResource extends Resource
 
                     Forms\Components\Repeater::make('links')
                         ->schema([
-                            Forms\Components\TextInput::make('site_name')->required(),
+                            Forms\Components\Textarea::make('svg')->label('SVG icon')->required()
+                                         ->helperText('Icons are available at https://flowbite.com/icons/'),
                             Forms\Components\TextInput::make('link')->required()
                         ])
                         ->columnSpanFull(),
@@ -133,7 +134,7 @@ class VendorApplicationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('user.email'),
                 Tables\Columns\TextColumn::make('kitchen_name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
