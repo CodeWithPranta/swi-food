@@ -8,7 +8,8 @@
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="mr-5 flex items-center space-x-2" wire:navigate>
-                <x-app-logo />
+                <x-secondary-logo class="dark:hidden" />
+                <x-logo class="hidden dark:block" />
             </a>
 
             <flux:navlist variant="outline">
@@ -21,11 +22,11 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
+                {{ __('Rules and Regulations') }}
                 </flux:navlist.item>
 
                 <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
+                {{ __('Donate') }}
                 </flux:navlist.item>
             </flux:navlist>
 

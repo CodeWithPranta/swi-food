@@ -60,13 +60,13 @@ class LocationController extends Controller
         $radius = 20; // Set your desired radius value here
 
         // When required multiple pagination in the same page
-        $nearbyVendors = VendorApplication::nearby($latLng, $radius)->paginate(4);
-        return dd($nearbyVendors);
+        $nearbyVendors = VendorApplication::where('is_approved', true)->nearby($latLng, $radius)->paginate(10);
+        //return dd($nearbyVendors);
 
         // Calculate and add the distance to the vendor data
         foreach ($nearbyVendors as $vendor) {
-            $vendorLatitude = $vendor->vendor_latitude;
-            $vendorLongitude = $vendor->vendor_longitude;
+            $vendorLatitude = $vendor->latitude;
+            $vendorLongitude = $vendor->longitude;
 
             // Calculate the distance between the user and the vendor using the Haversine formula
             $distance = haversineDistance($userLatitude, $userLongitude, $vendorLatitude, $vendorLongitude);

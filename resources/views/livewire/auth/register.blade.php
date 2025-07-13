@@ -25,7 +25,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'user_type' => ['required'],
+            'gender' => ['required', 'in:male,female,other'], // Accept only specific values
+            'date_of_birth' => ['required', 'date', 'before:today'], // Must be a valid past date
         ]);
+
 
         $validated['password'] = Hash::make($validated['password']);
 
@@ -65,6 +68,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <flux:radio value="2" label="Homestaurant owner"
                 description="Homestaurant owners can set up and sell homemade food with full user features." />
         </flux:radio.group>
+
+        <!-- User Gender -->
+        <flux:radio.group wire:model="gender" label="Gender" variant="segmented">
+            <flux:radio value="male" label="Male" />
+            <flux:radio value="female" label="Female" checked />
+            <flux:radio value="other" label="Other" />
+        </flux:radio.group>
+
+        <flux:input type="date" wire:model="date_of_birth" max="2015-12-31" label="Date of birth" />
 
         <!-- Password -->
         <flux:input wire:model="password" :label="__('Password')" type="password" required autocomplete="new-password"

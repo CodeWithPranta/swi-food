@@ -45,7 +45,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         if ($user->user_type == 2 && optional($user->vendorApplication)->is_approved != 1) {
             $this->redirect(route('homestaurant.application'), navigate: true);
         } else {
-            $this->redirectIntended(route('landing', absolute: false), navigate: true);
+            $this->redirectIntended(route('landing', absolute: false));
         }
     }
 
