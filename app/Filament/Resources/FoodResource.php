@@ -89,7 +89,8 @@ class FoodResource extends Resource
                     ->numeric()
                     ->prefix('CHF')
                     ->required(),
-                Forms\Components\TextInput::make('discount')->numeric()->required(),
+                Forms\Components\TextInput::make('discount')
+                    ->numeric()->required()->label('Discount (%)')->default(0),
                 Forms\Components\TextInput::make('quantity')
                     ->numeric()
                     ->minValue(1)

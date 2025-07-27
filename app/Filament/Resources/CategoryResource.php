@@ -64,7 +64,7 @@ class CategoryResource extends Resource
                             ->default(true),
                     ]),
                     Forms\Components\Section::make('Associations')->schema([
-                        Forms\Components\Select::make('parent_id')->relationship('parent', 'name'),
+                        Forms\Components\Select::make('parent_id')->relationship('parent', 'name', fn (Builder $query) => $query->whereNull('parent_id')),
                     ])
                 ])
             ]);
