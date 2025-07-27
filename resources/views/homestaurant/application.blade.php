@@ -36,17 +36,29 @@
 
             <div class="mb-4">
                 <label for="phone_number" class="block text-sm font-medium text-zinc-800">{{ __('Phone Number') }}</label>
-                <input type="text" name="phone_number" value="{{ old('phone_number') }}" placeholder="e.g. +41 43 123 45 67" id="phone_number" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800">
+
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-4 flex items-center text-zinc-700">+41</span>
+                    <input 
+                        type="text" 
+                        name="phone_number" 
+                        value="{{ old('phone_number') }}" 
+                        placeholder="e.g. 43 123 45 67" 
+                        id="phone_number" 
+                        required 
+                        class="mt-1 pl-12 text-zinc-700 block w-full border-gray-300 rounded-full shadow-sm focus:border-gray-800 focus:ring-gray-800"
+                    />
+                </div>
+
                 @error('phone_number')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
+
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">{{ __('Description') }}</label>
-                <textarea name="description" placeholder="Write short description on your kitchen and journey..." id="description" rows="4" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-4xl shadow-sm focus:border-gray-800 focus:ring-gray-800">
-                    {{ old('description') }}
-                </textarea>
+                <textarea name="description" placeholder="Write short description on your kitchen and journey..." id="description" rows="4" required class="mt-1 text-zinc-700 block w-full border-gray-300 rounded-4xl shadow-sm focus:border-gray-800 focus:ring-gray-800">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror

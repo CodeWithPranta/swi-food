@@ -29,7 +29,8 @@
                 <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <a href="{{ route('home') }}" class="z-20 flex flex-col items-center gap-2 font-medium lg:hidden" wire:navigate>
                         <span class="flex h-9 w-9 items-center justify-center rounded-md">
-                            <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
+                            <x-secondary-logo class="dark:hidden mx-auto w-64" />
+                            <x-logo class="hidden dark:block mx-auto w-64" />
                         </span>
 
                         <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>

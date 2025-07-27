@@ -22,11 +22,13 @@ class VendorApplication extends Model
         'latitude',         // Latitude for location
         'longitude',        // Longitude for location
         'is_approved',    // Approval status (default false)
+        'opening_hours',    // JSON field for opening hours per week
     ];
 
     protected $casts = [
         'attachments' => 'array', // Ensure attachments JSON is cast as an array
         'links' => 'array',       // Ensure links JSON is cast as an array
+        'opening_hours' => 'array', // Cast opening hours as JSON
     ];
 
     /**

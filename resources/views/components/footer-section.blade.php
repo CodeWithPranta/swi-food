@@ -1,4 +1,4 @@
-<footer class="bg-black text-gray-200 py-8">
+<footer  class="bg-black text-gray-200 py-8">
     <div
         class="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
         <!-- Left: Logo and Text -->

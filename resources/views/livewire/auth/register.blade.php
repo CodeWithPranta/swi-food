@@ -12,6 +12,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $name = '';
     public string $email = '';
     public $user_type;
+    public string $gender = '';
+    public string $date_of_birth = ''; // Use string to handle date input
     public string $password = '';
     public string $password_confirmation = '';
 
@@ -25,7 +27,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'user_type' => ['required'],
-            'gender' => ['required', 'in:male,female,other'], // Accept only specific values
+            'gender' => ['required'], 
             'date_of_birth' => ['required', 'date', 'before:today'], // Must be a valid past date
         ]);
 
@@ -80,11 +82,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <!-- Password -->
         <flux:input wire:model="password" :label="__('Password')" type="password" required autocomplete="new-password"
-            :placeholder="__('Password')" />
+            :placeholder="__('Password')" viewable />
 
         <!-- Confirm Password -->
         <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
-            autocomplete="new-password" :placeholder="__('Confirm password')" />
+            autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary"

@@ -8,7 +8,8 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <a href="{{ route('dashboard') }}" class="ml-2 mr-5 flex items-center space-x-2 lg:ml-0" wire:navigate>
-                <x-app-logo />
+                <x-secondary-logo class="dark:hidden" />
+                <x-logo class="hidden dark:block" />
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">

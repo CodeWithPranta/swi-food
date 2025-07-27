@@ -120,6 +120,40 @@ class VendorApplicationResource extends Resource
                             Forms\Components\TextInput::make('link')->required()
                         ])
                         ->columnSpanFull(),
+                    Forms\Components\Repeater::make('opening_hours')
+                        ->label('Opening Hours Per Week')
+                        ->schema([
+                            Forms\Components\Select::make('day')
+                                ->options([
+                                    'monday' => 'Monday',
+                                    'tuesday' => 'Tuesday',
+                                    'wednesday' => 'Wednesday',
+                                    'thursday' => 'Thursday',
+                                    'friday' => 'Friday',
+                                    'saturday' => 'Saturday',
+                                    'sunday' => 'Sunday',
+                                ])
+                                ->required()
+                                ->distinct(), // ✅ ensures uniqueness inside the JSON, not DB column
+                            Forms\Components\TimePicker::make('open')
+                                ->label('Opens At')
+                                ->withoutSeconds()
+                                ->required(),
+                            Forms\Components\TimePicker::make('close')
+                                ->label('Closes At')
+                                ->withoutSeconds()
+                                ->required(),
+                        ])
+                        ->default([
+                            ['day' => 'monday', 'open' => '09:00', 'close' => '21:00'],
+                        ])
+                        ->columnSpanFull()
+                        ->helperText('You can specify opening and closing times per day of the week.')
+                        ->addable(true)
+                        ->reorderable(true)
+                        ->deletable(true)
+                        ->collapsible(),
+
                     Forms\Components\Section::make('Status')->schema([
                         Forms\Components\Toggle::make('is_approved')
                             ->label('Approval')
