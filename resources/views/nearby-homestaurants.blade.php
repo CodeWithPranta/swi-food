@@ -1,32 +1,31 @@
 <x-landing-layout>
-    <section class="py-24 bg-white">
+    <section class="py-16 bg-white">
     <div class="max-w-screen-xl mx-auto px-4">
-        <h1 class="text-2xl font-bold text-gray-800 mb-8 text-center">Homestaurants near "{{ $location }}"</h1>
+        <h1 class="text-2xl pt-10 font-bold text-gray-800 mb-8 text-center">Homestaurants near "{{ $location }}"</h1>
+        <form method="GET" action="" class="flex flex-row items-center justify-center gap-2 sm:gap-4 max-w-3xl mx-auto mb-10">
+            {{-- Search input --}}
+            <input
+                type="text"
+                name="query"
+                id="query"
+                value="{{ request('query') }}"
+                placeholder="Search for a dish..."
+                class="w-full sm:w-[400px] px-6 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-red-500 focus:outline-none shadow-sm"
+                list="suggestions"
+                autocomplete="off"
+            />
 
-        <!-- @if($nearbyVendors->isEmpty())
-            <p class="text-center text-gray-500">No homestaurants found for this location.</p>
-        @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                @foreach($nearbyVendors as $vendor)
-                    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-300 overflow-hidden">
-                        <img src="{{ asset('storage/' . $vendor->cover_photo) }}" alt="{{ $vendor->chef_name }}"
-                            class="w-full h-48 object-cover" />
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-gray-900">{{ $vendor->kitchen_name }}</h3>
-                            <p class="text-sm text-gray-600 mt-1">{{ Str::limit($vendor->description, 100) }}</p>
-                            <p class="text-sm text-red-500 mt-2">{{ $vendor->distance ?? '' }}</p>
-                            <a href=""
-                                class="text-sm mt-4 inline-block text-red-600 hover:underline">View Details</a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+            {{-- Submit button --}}
+            <x-main-btn type="submit">Search</x-main-btn>
+        </form>
 
-            {{-- Pagination --}}
-            <div class="mt-10">
-                {{ $nearbyVendors->links() }}
-            </div>
-        @endif -->
+        <datalist id="suggestions">
+            <option value="Pizza">
+            <option value="Biryani">
+            <option value="Sushi">
+            <option value="Burger">
+            <option value="Curry">
+        </datalist>
 
         @if($nearbyVendors->isEmpty())
             <p class="text-center text-gray-500">No homestaurants found for this location.</p>
@@ -66,8 +65,11 @@
                     </p>
                     <div class="flex justify-between items-center text-sm text-gray-700">
                         <div class="flex items-center">
-                            <svg class="w-4 h-4 text-gray-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                            30-45 min
+                            <svg class="w-4 h-4 text-gray-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6c0 4.418 6 10 6 10s6-5.582 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
+                            </svg>
+
+                            {{ $vendor->distance ? number_format($vendor->distance, 2) . ' km' : '0 km' }}
                         </div>
                         <div class="font-semibold">
                             $$$
@@ -79,7 +81,7 @@
         </div>
 
         {{-- Pagination --}}
-        <div class="mt-10">
+        <div class="mt-10 max-w-7xl mx-auto">
             {{ $nearbyVendors->links() }}
         </div>
         @endif

@@ -60,7 +60,7 @@ class LocationController extends Controller
         $radius = 20; // Set your desired radius value here
 
         // When required multiple pagination in the same page
-        $nearbyVendors = VendorApplication::where('is_approved', true)->nearby($latLng, $radius)->paginate(8);
+        $nearbyVendors = VendorApplication::where('is_approved', true)->nearby($latLng, $radius)->paginate(4);
         //return dd($nearbyVendors);
 
         // Calculate and add the distance to the vendor data
