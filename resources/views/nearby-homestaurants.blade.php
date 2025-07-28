@@ -15,20 +15,21 @@
                 autocomplete="off"
             />
 
+            <datalist id="suggestions">
+                @foreach($allFoodNames as $foodName)
+                    <option value="{{ $foodName }}">{{ $foodName }}</option>
+                @endforeach
+            </datalist>
+
+
             {{-- Submit button --}}
             <x-main-btn type="submit">Search</x-main-btn>
         </form>
 
-        <datalist id="suggestions">
-            <option value="Pizza">
-            <option value="Biryani">
-            <option value="Sushi">
-            <option value="Burger">
-            <option value="Curry">
-        </datalist>
-
         @if($nearbyVendors->isEmpty())
-            <p class="text-center text-gray-500">No homestaurants found for this location.</p>
+            <p class="text-center text-gray-500">
+                No homestaurants found for "{{ request('query') }}" near "{{ $location }}".
+            </p>
         @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
             @foreach($nearbyVendors as $vendor)
@@ -47,10 +48,9 @@
                     $isOpen = $openTime && $closeTime && ($currentTime >= $openTime && $currentTime <= $closeTime);
                 @endphp
 
-                <div class="absolute top-3 left-3 {{ $isOpen ? 'bg-green-500' : 'bg-red-500' }} text-white text-xs font-semibold px-2 py-1 rounded-full">
+                <div class="absolute top-3 left-3 {{ $isOpen ? 'bg-green-700' : 'bg-red-700' }} text-white text-xs font-semibold px-2 py-1 rounded-full">
                     {{ $isOpen ? 'Open' : 'Closed' }}
                 </div>
-
                 </div>
                 <div class="p-4 sm:p-5">
                     <div class="flex justify-between items-start mb-2">
@@ -60,13 +60,20 @@
                             4.7 <span class="text-gray-500 ml-1">(500+)</span>
                         </div>
                     </div>
-                    <p class="text-gray-600 text-sm mb-3 truncate">
-                        Italian, Pasta, Pizza, Seafood, Desserts
+                    @php
+                        $categories = $vendor->foods
+                            ->pluck('category.name')
+                            ->unique()
+                            ->take(4) // Limit how many categories to show
+                            ->implode(', ');
+                    @endphp
+                    <p class="text-gray-700 text-sm mb-3 truncate">
+                        {{ $categories ?: 'No categories yet' }}
                     </p>
                     <div class="flex justify-between items-center text-sm text-gray-700">
                         <div class="flex items-center">
                             <svg class="w-4 h-4 text-gray-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6c0 4.418 6 10 6 10s6-5.582 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6c0 4.418 6 10 6 10s6-5.582 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
                             </svg>
 
                             {{ $vendor->distance ? number_format($vendor->distance, 2) . ' km' : '0 km' }}

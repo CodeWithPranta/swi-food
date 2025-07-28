@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VendorApplication;
+use App\Models\Food;
 
 class LocationController extends Controller
 {
@@ -57,10 +58,17 @@ class LocationController extends Controller
         }
 
         $latLng = $userLatitude . ',' . $userLongitude;
-        $radius = 20; // Set your desired radius value here
+        $radius = 30; // Set your desired radius value here
+        $searchQuery = request('query');
 
         // When required multiple pagination in the same page
-        $nearbyVendors = VendorApplication::where('is_approved', true)->nearby($latLng, $radius)->paginate(4);
+        $nearbyVendors = VendorApplication::with(['foods.category'])
+                     ->when($searchQuery, function ($query, $searchQuery) {
+                            $query->whereHas('foods', function ($q) use ($searchQuery) {
+                                $q->where('name', 'LIKE', '%' . $searchQuery . '%');
+                            });
+                        })
+                     ->where('is_approved', true)->nearby($latLng, $radius)->paginate(4);
         //return dd($nearbyVendors);
 
         // Calculate and add the distance to the vendor data
@@ -78,7 +86,9 @@ class LocationController extends Controller
         // Require for condition in blade file
         $numberOfRows = $nearbyVendors->count();
 
-        return view('nearby-homestaurants', compact(['location', 'latitude', 'longitude', 'nearbyVendors', 'numberOfRows']));
+        $allFoodNames = Food::where('is_visible', true)->pluck('name')->unique();
+
+        return view('nearby-homestaurants', compact(['location', 'latitude', 'longitude', 'nearbyVendors', 'numberOfRows', 'allFoodNames']));
     }
 
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VendorApplication extends Model
 {
@@ -45,6 +46,14 @@ class VendorApplication extends Model
     public function profession(): BelongsTo
     {
         return $this->belongsTo(Profession::class);
+    }
+
+    public function foods(): HasMany
+    {
+        // Define a one-to-many relationship with the Food model
+        // This assumes that the 'user_id' in the Food model corresponds to the 'user_id' in VendorApplication
+        // Adjust the foreign key and local key as necessary based on your database schema
+        return $this->hasMany(Food::class, 'user_id', 'user_id');
     }
 
     protected $appends = [];
