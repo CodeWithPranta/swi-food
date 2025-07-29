@@ -33,7 +33,7 @@
         @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
             @foreach($nearbyVendors as $vendor)
-            <div class="bg-white rounded-xl shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+            <div onclick="window.location.href='{{ route('homestaurant.show', [$vendor->id]) }}'" class="bg-white rounded-xl shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
                 <div class="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img class="w-full h-full object-cover" src="{{ asset('storage/' . $vendor->cover_photo) }}" alt="Cover photo of {{$vendor->kitchen_name}}">
                     @php

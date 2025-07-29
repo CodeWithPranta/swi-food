@@ -92,7 +92,14 @@ class LocationController extends Controller
         return view('nearby-homestaurants', compact(['location', 'latitude', 'longitude', 'nearbyVendors', 'numberOfRows', 'allFoodNames']));
     }
 
+    // Show single vendor page
+    public function show($id)
+    {
+        $vendor = VendorApplication::with(['foods','foods.category'])->findOrFail($id);
 
+        return view('homestaurant.menu-card', compact('vendor'));
+    }
+        
     public function storeOrUpdateLocation(Request $request)
     {
         $userId = auth()->id();

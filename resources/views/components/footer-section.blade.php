@@ -17,7 +17,7 @@
         <!-- Right: Social Icons -->
         <div class="flex space-x-4 my-2">
             @foreach($socialLinks as $social)
-                <a href="{{ $social['url'] }}" class="text-gray-400 hover:text-white transition">
+                <a href="{{ $social['url'] }}" class="text-gray-200 hover:text-white transition">
                     {!! $social['svg'] !!}
                 </a>
             @endforeach   

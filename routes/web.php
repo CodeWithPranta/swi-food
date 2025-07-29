@@ -17,6 +17,7 @@ Route::get('/apply/thank-you', [VendorRegistrationController::class, 'thankYou']
 
 Route::post('/location-filter', [LocationController::class, 'storeOrUpdateLocation'])->name('store-location');
 Route::get('/nearby-homestaurants', [LocationController::class, 'index'])->name('nearby.homestaurants');
+Route::get('/homestaurant/{id}', [LocationController::class, 'show'])->name('homestaurant.show');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
