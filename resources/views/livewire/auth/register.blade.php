@@ -78,7 +78,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <flux:radio value="other" label="Other" />
         </flux:radio.group>
 
-        <flux:input type="date" wire:model="date_of_birth" max="2015-12-31" label="Date of birth" />
+        <flux:input type="date" wire:model="date_of_birth" max="{{ now()->toDateString() }}" label="Date of birth" />
 
         <!-- Password -->
         <flux:input wire:model="password" :label="__('Password')" type="password" required autocomplete="new-password"

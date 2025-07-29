@@ -88,6 +88,7 @@ class LocationController extends Controller
 
         $allFoodNames = Food::where('is_visible', true)->pluck('name')->unique();
 
+
         return view('nearby-homestaurants', compact(['location', 'latitude', 'longitude', 'nearbyVendors', 'numberOfRows', 'allFoodNames']));
     }
 

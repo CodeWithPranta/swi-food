@@ -70,7 +70,7 @@
                     <p class="text-gray-700 text-sm mb-3 truncate">
                         {{ $categories ?: 'No categories yet' }}
                     </p>
-                    <div class="flex justify-between items-center text-sm text-gray-700">
+                    <div class="flex justify-between items-center text-sm font-semibold text-gray-700">
                         <div class="flex items-center">
                             <svg class="w-4 h-4 text-gray-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6c0 4.418 6 10 6 10s6-5.582 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
@@ -79,7 +79,19 @@
                             {{ $vendor->distance ? number_format($vendor->distance, 2) . ' km' : '0 km' }}
                         </div>
                         <div class="font-semibold">
-                            $$$
+                            @php
+                            // Calculate the lowest price considering discount
+                            $lowestPrice = $vendor->foods->map(function ($food) {
+                                if ($food->discount && $food->discount > 0) {
+                                    return $food->price - ($food->price * $food->discount / 100);
+                                }
+                                return $food->price;
+                            })->filter()->min();
+
+                            // Attach to vendor
+                            $vendor->lowest_price = $lowestPrice;
+                            @endphp
+                            {!! $vendor->lowest_price ? '<span class="text-gray-700 font-normal">Start from</span> ' . number_format($vendor->lowest_price, 2) . ' CHF' : '<span class="text-gray-700 font-normal">N/A</span>' !!}
                         </div>
                     </div>
                 </div>
