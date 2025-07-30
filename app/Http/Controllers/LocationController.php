@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VendorApplication;
 use App\Models\Food;
+use Illuminate\Support\Str;
 
 class LocationController extends Controller
 {
@@ -91,15 +92,32 @@ class LocationController extends Controller
 
         return view('nearby-homestaurants', compact(['location', 'latitude', 'longitude', 'nearbyVendors', 'numberOfRows', 'allFoodNames']));
     }
+    // Show the vendor's menu card
 
-    // Show single vendor page
-    public function show($id)
+    public function show($id, $kitchen_name)
     {
-        $vendor = VendorApplication::with(['foods','foods.category'])->findOrFail($id);
+        $vendor = VendorApplication::with(['foods.category'])->findOrFail($id);
 
-        return view('homestaurant.menu-card', compact('vendor'));
+        $expectedSlug = Str::slug($vendor->kitchen_name);
+        if ($expectedSlug !== $kitchen_name) {
+            abort(404);
+        }
+
+        // Extract all foods
+        $vendorFoods = $vendor->foods;
+
+        // Build the category mapping: ['Category Name' => category_id]
+        $vendorFoodCategories = $vendorFoods
+            ->pluck('category') // Get all categories (some may be duplicate)
+            ->unique('id') // Remove duplicates by ID
+            ->mapWithKeys(function ($category) {
+                return [$category->name => $category->id];
+            });
+
+        return view('homestaurant.menu-card', compact('vendor', 'vendorFoods', 'vendorFoodCategories'));
     }
-        
+
+            
     public function storeOrUpdateLocation(Request $request)
     {
         $userId = auth()->id();
