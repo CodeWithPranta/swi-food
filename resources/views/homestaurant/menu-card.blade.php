@@ -22,7 +22,7 @@
 }
 </style>
 
-     <section class="relative overflow-hidden py-10">
+     <section class="relative overflow-hidden pb-10">
         
         <!-- Animated floating bubbles -->
     <div class="absolute inset-0 z-0 pointer-events-none">
@@ -93,7 +93,7 @@
                 <h1 class="bg-clip-text text-white text-xl md:text-2xl text-center font-black font-serif mt-4">
                     <b class="bg-red-700 px-4 py-2 rounded-3xl">MENU CARD</b><br>
                 </h1>
-
+                 
                 @foreach ($vendorFoodCategories as $categoryName => $categoryId)
                     <h2 class="bg-clip-text text-center text-gray-700 text-lg font-serif mt-8"><b>{{ $categoryName }}</b></h2>
                     <ul class="text-md md:text-lg list-none font-sans font-extrabold my-5 space-y-4">
@@ -104,22 +104,20 @@
                                 @endphp
 
                                 <li class="flex items-center justify-between rounded-xl px-4 py-3 shadow transition">
-                                    <a href="#" class="text-black hover:text-red-600 hover:underline font-extrabold">
-                                         {{ $item->name }}
+                                    <a href="#" class="text-black hover:text-red-600 font-extrabold">
+                                        {{ $item->name }}
+                                        <sup>
+                                            @if ($item->discount > 0)
+                                                <span class="text-red-600 line-through">{{ number_format($item->discount) }}%</span>
+                                            @endif
+                                        </sup>
                                     </a>
 
                                     <div class="flex items-center space-x-3">
                                         <span class="text-black">{{ number_format($finalPrice, 2) }} CHF</span>
 
-                                        <form method="POST" action="">
-                                            @csrf
-                                            <button type="submit" title="Add to Cart" class="text-green-600 hover:text-green-800 cursor-pointer text-xl">
-                                                <svg class="w-6 h-6 mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
-                                                </svg>
-                                            </button>
-
-                                        </form>
+                                       <!-- <livewire:add-to-cart :food-id="$item->id" :vendor-application-id="$item->user_id" :wire:key="'cart-'.$item->id" /> -->
+                                        @livewire('add-to-cart', ['food' => $item], key($item->id))
                                     </div>
                                 </li>
                             @endif
@@ -132,7 +130,6 @@
                 </p>
             </div>
         </div>
-
 
         @php
             $allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -182,7 +179,7 @@
                     <span>About Homestaurant</span>
                 </h2>
             </div>
-            <div class="bg-white rounded-xl shadow p-5 leading-relaxed">
+            <div class="bg-white rounded-xl text-justify shadow p-5 leading-relaxed">
                 {!! $vendor->description !!}
             </div>
         </div>

@@ -18,6 +18,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <x-colors />
+    <livewire:styles />
 </head>
 
 <body class="bg-gray-50">
@@ -25,8 +26,7 @@
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
             <x-logo class="w-40 md:w-48" />
             <div class="flex md:order-2">
-                <x-cart-icon class="mr-4">
-                </x-cart-icon>
+                <livewire:cart-icon class="mr-4">
                 <button data-collapse-toggle="navbar-sticky" type="button"
                     class="inline-flex items-center cursor-pointer p-1 text-sm text-gray-50 rounded-lg md:hidden focus:ring-0"
                     aria-controls="navbar-sticky" aria-expanded="false">
@@ -76,8 +76,10 @@
     <main>
         {{ $slot }}
     </main>
+    
+     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <livewire:scripts />
 </body>
 
 </html>
