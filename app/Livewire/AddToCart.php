@@ -47,7 +47,7 @@ class AddToCart extends Component
             ]);
         }
 
-        $successMessage = 'Item added to cart successfully.';
+        $successMessage = 'Item added to plate successfully.';
         // session()->flash('success', 'Item added to cart.');
         $this->dispatch('notify', success: $successMessage); // Optional: to update icon
 
