@@ -88,7 +88,7 @@
     </div>
 
     {{-- Menu Section --}}
-        <div class="my-10 max-w-screen-md mx-auto px-4 py-2 bg-cover bg-center text-white" style="background-image: url('{{ asset('images/bg-yellow.jpg') }}')">
+        <div class="my-10 max-w-screen-lg mx-auto px-4 py-2 bg-cover bg-center text-white" style="background-image: url('{{ asset('images/bg-yellow.jpg') }}')">
             <div class="mt-5 mx-auto sm:w-3/4 p-5 rounded-3xl text-black">
                 <h1 class="bg-clip-text text-white text-xl md:text-2xl text-center font-black font-serif mt-4">
                     <b class="bg-red-700 px-4 py-2 rounded-3xl">MENU CARD</b><br>
@@ -104,7 +104,7 @@
                                 @endphp
 
                                 <li class="flex items-center justify-between rounded-xl px-4 py-3 shadow transition">
-                                    <a href="#" class="text-black hover:text-red-600 font-extrabold">
+                                    <a href="{{route('food.details', [$item->id, Str::slug($item->name)] )}}" class="text-black hover:text-red-600 font-extrabold">
                                         {{ $item->name }}
                                         <sup>
                                             @if ($item->discount > 0)
@@ -137,7 +137,7 @@
         @endphp
 
         @if($hours->isNotEmpty())
-            <div class="mt-10 max-w-screen-md mx-auto px-4">
+            <div class="mt-10 max-w-screen-sm mx-auto px-4">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">🕒 Opening Hours</h2>
 
                 <div class="bg-white shadow rounded-xl overflow-hidden divide-y divide-gray-200">
@@ -168,7 +168,7 @@
 
 
         {{-- Vendor Description --}}
-        <div class="max-w-screen-md mx-auto px-4 mt-12 text-gray-700">
+        <div class="max-w-screen-lg mx-auto px-4 mt-12 text-gray-700">
             <div class="flex justify-center mb-4">
                 <h2 class="text-2xl font-semibold flex items-center space-x-2 text-center">
                     <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2"
