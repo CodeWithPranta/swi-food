@@ -17,6 +17,7 @@ class AddToCart extends Component
         $user = Auth::user();
 
         if (!$user) {
+            session(['url.intended' => url()->previous()]);
             return redirect()->route('login');
         }
 
