@@ -32,6 +32,8 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'user_type',
         'email_verified_at',
+        'phone',
+        'address',
     ];
 
     /**
@@ -92,4 +94,10 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasOne(VendorApplication::class);
     }
+
+    public function likedFoods()
+    {
+        return $this->belongsToMany(Food::class, 'food_likes')->withTimestamps();
+    }
+
 }

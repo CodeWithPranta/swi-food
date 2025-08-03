@@ -55,4 +55,15 @@ class Food extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'food_likes')->withTimestamps();
+    }
+
+    public function isLikedBy($user)
+    {
+        return $this->likedByUsers()->where('user_id', $user->id)->exists();
+    }
+
 }

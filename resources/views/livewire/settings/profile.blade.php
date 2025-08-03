@@ -15,6 +15,8 @@ new class extends Component {
     public ?string $gender = null;
     public ?string $date_of_birth = null;
     public $profile_image;
+    public ?string $phone = null;
+    public ?string $address = null;
 
     public function mount(): void
     {
@@ -25,6 +27,9 @@ new class extends Component {
         $this->gender = $user->gender;
         $this->date_of_birth = $user->date_of_birth;
         $this->profile_image = $user->profile_image;
+         // 🛠 Add these two lines:
+        $this->phone = $user->phone;
+        $this->address = $user->address;
     }
 
     public function updateProfileInformation(): void
@@ -41,6 +46,8 @@ new class extends Component {
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id)
             ],
+            'phone' => ['nullable', 'string', 'max:15'],
+            'address' => ['nullable', 'string', 'max:255'],
             'gender' => ['nullable', 'in:male,female,other'],
             'date_of_birth' => ['nullable', 'date', 'before:today'],
             'profile_image' => ['nullable'],
@@ -152,17 +159,37 @@ new class extends Component {
                     </div>
                 @endif
             </div>
+            <div>
+                <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <div class="flex rounded-md shadow-sm">
+                    <span class="inline-flex items-center px-3 rounded-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        +41
+                    </span>
+                    <flux:input
+                        wire:model="phone"
+                        id="phone"
+                        type="text"
+                    />
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <flux:input wire:model="address" :label="__('Address')" type="text" />
+            </div>
 
             <!-- Gender Selection -->
             <!-- User Gender -->
-            <flux:radio.group wire:model="gender" label="Gender" variant="segmented">
+            <div class="mt-6">
+                <flux:radio.group wire:model="gender" label="Gender" variant="segmented">
                 <flux:radio value="male" label="Male" />
                 <flux:radio value="female" label="Female" />
                 <flux:radio value="other" label="Other" />
-            </flux:radio.group>
+                </flux:radio.group>
+            </div>
 
             <!-- Date of Birth -->
-            <div>
+            <div class="my-6">
                 <flux:input wire:model="date_of_birth" :label="__('Date of Birth')" type="date" max="{{ now()->toDateString() }}" />
             </div>
             
