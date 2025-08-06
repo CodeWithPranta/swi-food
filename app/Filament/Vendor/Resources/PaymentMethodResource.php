@@ -2,9 +2,9 @@
 
 namespace App\Filament\Vendor\Resources;
 
-use App\Filament\Vendor\Resources\DeliveryChargeResource\Pages;
-use App\Filament\Vendor\Resources\DeliveryChargeResource\RelationManagers;
-use App\Models\DeliveryCharge;
+use App\Filament\Vendor\Resources\PaymentMethodResource\Pages;
+use App\Filament\Vendor\Resources\PaymentMethodResource\RelationManagers;
+use App\Models\PaymentMethod;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,14 +12,13 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\DeliveryArea;
 use Illuminate\Support\Facades\Auth;
 
-class DeliveryChargeResource extends Resource
+class PaymentMethodResource extends Resource
 {
-    protected static ?string $model = DeliveryCharge::class;
+    protected static ?string $model = PaymentMethod::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-plus';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function getEloquentQuery(): Builder
     {
@@ -34,14 +33,14 @@ class DeliveryChargeResource extends Resource
                 Forms\Components\Hidden::make('user_id')
                     ->default(fn () => auth()->id())
                     ->required(),
-                Forms\Components\TextInput::make('area')
-                    ->label('Delivery Area')
+                Forms\Components\TextInput::make('bank_name')
                     ->required()
-                    ->minLength(3)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('charge')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\RichEditor::make('details')
+                    ->columnSpanFull(),
+                Forms\Components\Toggle::make('is_active')
+                    ->default(true)
+                    ->required(),
             ]);
     }
 
@@ -49,11 +48,10 @@ class DeliveryChargeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('area')
+                Tables\Columns\TextColumn::make('bank_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('charge')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -86,9 +84,9 @@ class DeliveryChargeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDeliveryCharges::route('/'),
-            'create' => Pages\CreateDeliveryCharge::route('/create'),
-            'edit' => Pages\EditDeliveryCharge::route('/{record}/edit'),
+            'index' => Pages\ListPaymentMethods::route('/'),
+            'create' => Pages\CreatePaymentMethod::route('/create'),
+            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
         ];
     }
 }
