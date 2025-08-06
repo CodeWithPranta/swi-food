@@ -46,9 +46,8 @@ class VendorApplicationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
+                Forms\Components\Hidden::make('user_id')
                     ->default(fn () => auth()->id())
-                    ->readOnly()
                     ->required(),
                 Forms\Components\TextInput::make('kitchen_name')
                     ->unique(ignoreRecord: true)

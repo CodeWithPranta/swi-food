@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('homestaurant_settings', function (Blueprint $table) {
+        Schema::create('delivery_charges', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->decimal('delivery_cost_per_km')->default(0);
-            $table->longText('banks')->nullable();
+            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade'); // User who sets the delivery charge
+            $table->string('area');
+            $table->decimal('charge', 10, 2); // Delivery charge for the area
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('homestaurant_settings');
+        Schema::dropIfExists('delivery_charges');
     }
 };
