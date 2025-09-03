@@ -38,6 +38,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         Auth::login($user);
 
+        // ✅ Redirect unverified users to verify-email page
+        if (!$user->hasVerifiedEmail()) {
+            $this->redirect(route('verification.notice'), navigate: true);
+            return;
+        }
+
         // $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
         // Redirect based on user type
         if ($user->user_type == 2) {

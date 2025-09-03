@@ -10,6 +10,7 @@ class AddToCart extends Component
 {
     public $food;
     public $quantity = 1;
+    public $preference = '';
 
     public function addToCart()
     {
@@ -45,6 +46,7 @@ class AddToCart extends Component
                 'food_id' => $this->food->id,
                 'quantity' => $this->quantity,
                 'price' => $this->food->discount == 0 ? $this->food->price : $this->food->price - ($this->food->price * $this->food->discount / 100 ),
+                'preference' => $this->preference,
             ]);
         }
 
