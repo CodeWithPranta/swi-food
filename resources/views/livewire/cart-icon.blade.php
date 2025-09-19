@@ -1,5 +1,5 @@
 <div>
-    <a href="" class="focus:ring-0 flex">
+    <a href="{{ route('cart.details') }}" class="focus:ring-0 flex">
     @if ($cartCount > 0)
         <sup class="px-2 pt-0.5 md:pt-0 text-sm md:text-lg bg-red-500 text-white font-semibold rounded-full">{{ $cartCount }}</sup>
     @endif

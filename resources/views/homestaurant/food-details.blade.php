@@ -65,24 +65,35 @@
           </svg>
           <span class="ml-2 text-gray-600">4.5 (120 reviews)</span>
         </div>
+        
         <div class="mb-6">
-          <label for="preference" class="block text-sm font-medium text-gray-700 mb-1">Preference:</label>
-          <textarea id="preference" name="preference" wire:model="preference" rows="4"
-                        class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
-                        placeholder="Add any special requests (e.g. extra spicy, less oil, no onions)..."></textarea>
-        </div>
+          <form action="{{ route('order.now') }}" method="POST">
+            @csrf
+            <!-- Hidden fields -->
+            <input type="hidden" name="food_id" value="{{ $food->id }}">
+            <input type="hidden" name="vendor_application_id" value="{{ $vendor->id }}">
 
-        <div class="mb-6">
-          <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity:</label>
-          <input type="number" wire:model="quantity" id="quantity" name="quantity" min="1" value="1"
-                        class="w-12 text-center rounded-md border-gray-300  shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50">
-        </div>
+            <!-- Preference -->
+            <label for="preference" class="block text-sm font-medium text-gray-700 mb-1">Preference:</label>
+            <textarea id="preference" name="preference" rows="4"
+              class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
+              placeholder="Add any special requests (e.g. extra spicy, less oil, no onions)..."></textarea>
 
-        <div class="flex space-x-4 mb-6">
-          <x-main-btn class="flex gap-2">
-            Add to Cart
-          </x-main-btn>
-          <livewire:like-food :food="$food" :wire:key="'like-'.$food->id" />
+            <!-- Quantity -->
+            <div class="mt-4">
+              <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity:</label>
+              <input type="number" id="quantity" name="quantity" min="1" value="1"
+                class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex space-x-4 mt-6">
+              <x-main-btn type="submit" class="flex gap-2">
+                Order now
+              </x-main-btn>
+              <livewire:like-food :food="$food" :wire:key="'like-'.$food->id" />
+            </div>
+          </form>
         </div>
 
         <div>

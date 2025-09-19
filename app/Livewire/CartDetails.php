@@ -8,12 +8,20 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\DeliveryCharge;
+use App\Models\PaymentMethod;
 
 class CartDetails extends Component
 {
+    public $expected_receive_time;
+    public $delivery_areas = [];
+    public $delivery_area = null;
+    public $payment_methods;
+    public $selected_payment_method;
     public $carts = [];
-    public $contact_name, $contact_phone, $delivery_area, $delivery_address;
-    public $special_instructions, $payment_method = 'cash', $delivery_option = true;
+    public $contact_name, $contact_phone, $delivery_address;
+    public $special_instructions, $payment_method = 'cash';
+    public $delivery_option = 'delivery'; // default value: 'delivery' or 'pickup'
     public $subtotal = 0, $delivery_charge = 0, $total = 0;
 
     protected $rules = [
@@ -22,11 +30,14 @@ class CartDetails extends Component
         'delivery_area' => 'nullable|string|max:255',
         'delivery_address' => 'nullable|string|max:255',
         'payment_method' => 'required',
+        'expected_receive_time' => 'nullable|date_format:Y-m-d\TH:i',
     ];
 
     public function mount()
     {
         $this->loadCart();
+        $this->delivery_areas = DeliveryCharge::all();
+        $this->payment_methods = PaymentMethod::all();
     }
 
     public function loadCart()
@@ -58,10 +69,30 @@ class CartDetails extends Component
         $this->loadCart();
     }
 
+    public function updatedDeliveryOption()
+    {
+        if ($delivery_option === 'delivery') {
+            if ($this->delivery_area) {
+                $area = DeliveryCharge::find($this->delivery_area);
+                $this->delivery_charge = $area ? $area->charge : 0;
+            } else {
+                $this->delivery_charge = 0;
+            }
+        } else {
+            $this->delivery_area = null;
+            $this->delivery_charge = 0;
+        }
+
+        $this->calculateTotals();
+    }
+   
+
     public function calculateTotals()
     {
         $this->subtotal = collect($this->carts)->sum(fn($item) => $item['price'] * $item['quantity']);
-        $this->delivery_charge = $this->delivery_option ? 50 : 0; // Example: fixed charge
+        $this->delivery_charge = ($this->delivery_option === 'delivery' && $this->delivery_area) 
+            ? (DeliveryCharge::find($this->delivery_area)->charge ?? 0) 
+            : 0;
         $this->total = $this->subtotal + $this->delivery_charge;
     }
 
@@ -81,7 +112,7 @@ class CartDetails extends Component
                 'user_id' => Auth::id(),
                 'vendor_application_id' => $vendorId,
                 'special_instructions' => $this->special_instructions,
-                'expected_receive_time' => now()->addMinutes(45),
+                'expected_receive_time' => $this->expected_receive_time ?? now()->addHour(),
                 'delivery_option' => $this->delivery_option,
                 'contact_name' => $this->contact_name,
                 'contact_phone' => $this->contact_phone,

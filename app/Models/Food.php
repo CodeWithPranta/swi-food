@@ -66,4 +66,10 @@ class Food extends Model
         return $this->likedByUsers()->where('user_id', $user->id)->exists();
     }
 
+    // ✅ Reverse relationship with Cart
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'food_id');
+    }
+
 }

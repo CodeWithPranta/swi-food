@@ -6,6 +6,8 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\FoodController;
+use App\Livewire\CartDetails;
+use App\Http\Controllers\OrderController;
 
 Route::get('/home', function () {
     return view('welcome');
@@ -31,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
+    Route::post('/order-now', [OrderController::class, 'orderNow'])->name('order.now');
+    Route::get('/cart', CartDetails::class)->name('cart.details');
 });
 
 require __DIR__.'/auth.php';
