@@ -83,82 +83,111 @@
             <p>Total: <b>{{ number_format($total, 2) }} CHF</b></p>
         </div>
 
-        <!-- Order Form -->
+        <!-- ✅ Order Form -->
         <h2 class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">Order information</h2>
 
-        <form wire:submit.prevent="placeOrder" class="space-y-4">
-            <!-- Contact Name -->
-            <div>
-                <label class="text-gray-700 dark:text-gray-300">Contact name</label>
-                <input type="text" wire:model="contact_name"
-                       class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                @error('contact_name') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
+        <form action="{{ route('orders.place') }}" method="POST" class="space-y-4" id="orderForm">
+        @csrf
 
-            <!-- Contact Phone -->
-            <div>
-                <label class="text-gray-700 dark:text-gray-300">Phone</label>
-                <input type="text" wire:model="contact_phone"
-                       class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                @error('contact_phone') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
+        <!-- Contact Name -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Contact name</label>
+            <input type="text" name="contact_name"
+                class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                required>
+        </div>
 
-            <!-- Special Instructions -->
-            <div>
-                <label class="text-gray-700 dark:text-gray-300">Special instructions</label>
-                <textarea wire:model="special_instructions"
-                          class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"></textarea>
-            </div>
+        <!-- Contact Phone -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Phone</label>
+            <input type="text" name="contact_phone"
+                class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                required>
+        </div>
 
-            <!-- Delivery Option -->
-            <div>
-                <label class="text-gray-700 dark:text-gray-300">Delivery option</label>
-                <select wire:model.live="delivery_option"
-                        class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                    <option value="delivery">Delivery</option>
-                    <option value="pickup">Pickup</option>
-                </select>
-            </div>
+        <!-- Expected Receive Time -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Expected receive time</label>
+            <input type="datetime-local" name="expected_receive_time"
+                class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                required>
+        </div>
 
-            <!-- Delivery Area Dropdown (Hide for Pickup) -->
-            <div class="@if($delivery_option === 'pickup') hidden @endif">
-                <label class="text-gray-700 dark:text-gray-300">Delivery area</label>
-                <select wire:model="delivery_area"
-                        class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                    <option value="">Select area</option>
-                    @foreach($delivery_areas as $area)
-                        <option value="{{ $area->id }}">
-                            {{ $area->area }} ({{ number_format($area->charge, 2) }} CHF)
-                        </option>
-                    @endforeach
-                </select>
-                @error('delivery_area') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
+        <!-- Special Instructions -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Special instructions</label>
+            <textarea name="special_instructions"
+                    class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"></textarea>
+        </div>
 
-            <!-- Delivery Address -->
-            @if($delivery_option === 'delivery')
-                <div>
-                    <label class="text-gray-700 dark:text-gray-300">Delivery address</label>
-                    <input type="text" wire:model="delivery_address"
-                           class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                </div>
-            @endif
+        <!-- Delivery Option -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Delivery option</label>
+            <select name="delivery_option" id="deliveryOption"
+                    class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
+                <option value="delivery">Delivery</option>
+                <option value="pickup">Pickup</option>
+            </select>
+        </div>
 
-            <!-- Payment Method -->
-            <div>
-                <label class="text-gray-700 dark:text-gray-300">Payment method</label>
-                <select wire:model="payment_method"
-                        class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
-                    <option value="cash">Cash on delivery</option>
-                    <option value="recommended">Homestaurant recommended</option>
-                </select>
-            </div>
+        <!-- Delivery Area -->
+        <div id="deliveryAreaWrap">
+            <label class="text-gray-700 dark:text-gray-300">Delivery area</label>
+            <select name="delivery_area"
+                    class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
+                <option value="">Select area</option>
+                @foreach($delivery_areas as $area)
+                    <option value="{{ $area->id }}">
+                        {{ $area->area }} ({{ number_format($area->charge, 2) }} CHF)
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-            <x-main-btn type="submit">
-                Place order
-            </x-main-btn>
-        </form>
+        <!-- Delivery Address -->
+        <div id="deliveryAddressWrap">
+            <label class="text-gray-700 dark:text-gray-300">Delivery address</label>
+            <input type="text" name="delivery_address"
+                class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
+        </div>
+
+        <!-- Payment Method -->
+        <div>
+            <label class="text-gray-700 dark:text-gray-300">Payment method</label>
+            <select name="payment_method"
+                    class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
+                <option value="cash">Cash on delivery</option>
+                <option value="recommended">Homestaurant recommended</option>
+            </select>
+        </div>
+
+        <x-main-btn type="submit">Place order</x-main-btn>
+    </form>
+
+
     @else
         <p class="text-gray-700 dark:text-gray-300">Your cart is empty.</p>
     @endif
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deliveryOption = document.getElementById("deliveryOption");
+            const deliveryAreaWrap = document.getElementById("deliveryAreaWrap");
+            const deliveryAddressWrap = document.getElementById("deliveryAddressWrap");
+
+            function toggleDeliveryFields() {
+                if (deliveryOption.value === "pickup") {
+                    deliveryAreaWrap.style.display = "none";
+                    deliveryAddressWrap.style.display = "none";
+                } else {
+                    deliveryAreaWrap.style.display = "block";
+                    deliveryAddressWrap.style.display = "block";
+                }
+            }
+
+            deliveryOption.addEventListener("change", toggleDeliveryFields);
+            toggleDeliveryFields();
+        });
+    </script>
+
 </div>

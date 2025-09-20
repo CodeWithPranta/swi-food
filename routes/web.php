@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     Route::post('/order-now', [OrderController::class, 'orderNow'])->name('order.now');
+    Route::post('/orders/place', [OrderController::class, 'placeOrder'])->name('orders.place');
+    Route::get('/orders/success', [OrderController::class, 'orderSuccess'])->name('orders.success');
     Route::get('/cart', CartDetails::class)->name('cart.details');
 });
 

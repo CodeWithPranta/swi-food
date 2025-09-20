@@ -138,9 +138,4 @@ class CartDetails extends Component
         session()->flash('success', 'Order placed successfully!');
         return redirect()->route('orders.success');
     }
-
-    public function render()
-    {
-        return view('livewire.cart-details');
-    }
 }
