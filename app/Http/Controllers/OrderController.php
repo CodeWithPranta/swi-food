@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\DeliveryCharge;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Filament\Notifications\Notification;
 
 class OrderController extends Controller
 {
@@ -86,13 +87,13 @@ class OrderController extends Controller
         }
 
         DB::transaction(function () use ($carts, $request) {
-            $vendorId = \App\Models\VendorApplication::where('user_id', $carts[0]->food->user_id)->value('id');
-
+            //$vendorId = \App\Models\VendorApplication::where('user_id', $carts[0]->food->user_id)->value('id');
+            $vendor = \App\Models\VendorApplication::where('user_id', $carts[0]->food->user_id)->first();
             //dd($vendorId);
 
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'vendor_application_id' => $vendorId,
+                'vendor_application_id' => $vendor->id,
                 'special_instructions' => $request->special_instructions,
                 'expected_receive_time' => $request->expected_receive_time ?? now()->addHour(),
                 'delivery_option' => $request->delivery_option,
@@ -111,8 +112,21 @@ class OrderController extends Controller
                     'food_id' => $cart->food_id,
                     'quantity' => $cart->quantity,
                     'price' => $cart->price,
+                    'preference' => $cart->preference,
                 ]);
             }
+
+            // ✅ Send notification to vendor
+            $vendorUser = $vendor->user; // assuming relation VendorApplication -> user
+            //dd($vendorUser);
+            $vendorUser->notify(new \App\Notifications\NewOrderNotification($order));
+            // Send database notification for Filament panel
+            // Send database notification for Filament panel
+            Notification::make()
+                ->title('New Order Received')
+                ->body("Order #{$order->id} from {$order->contact_name}, Total: {$order->total_price} CHF")
+                ->success() // optional: sets notification color/level
+                ->sendToDatabase($vendorUser);
 
             Cart::where('user_id', Auth::id())->delete();
         });
@@ -123,6 +137,18 @@ class OrderController extends Controller
     public function orderSuccess()
     {
         return view('homestaurant.order-success');
+    }
+
+    public function customerOrders()
+    {
+        $orders = Order::where('user_id', Auth::id())
+            ->with('vendor.user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        dd($orders);
+
+        return view('customer-orders', compact('orders'));
     }
 
 }

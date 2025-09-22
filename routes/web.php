@@ -37,6 +37,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/order-now', [OrderController::class, 'orderNow'])->name('order.now');
     Route::post('/orders/place', [OrderController::class, 'placeOrder'])->name('orders.place');
     Route::get('/orders/success', [OrderController::class, 'orderSuccess'])->name('orders.success');
+    Route::get('/orders', [OrderController::class, 'customerOrders'])->name('orders.customer');
+    Route::get('/orders/{id}', [OrderController::class, 'orderDetails'])->name('orders.details');
     Route::get('/cart', CartDetails::class)->name('cart.details');
 });
 

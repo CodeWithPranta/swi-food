@@ -55,6 +55,8 @@ class VendorPanelProvider extends PanelProvider
                 // This is the view that will be rendered
                 fn () => view('vendor-footer'),
             )
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->authMiddleware([
                 Authenticate::class,
             ]);
