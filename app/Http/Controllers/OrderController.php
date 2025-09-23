@@ -11,6 +11,7 @@ use App\Models\DeliveryCharge;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Filament\Notifications\Notification;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -73,7 +74,7 @@ class OrderController extends Controller
             'contact_name' => 'required|string|max:255',
             'contact_phone' => 'required|string|max:20',
             'delivery_option' => 'required|in:delivery,pickup',
-            'delivery_area' => 'nullable|integer',
+            'delivery_area' => 'nullable|string',
             'delivery_address' => 'nullable|string|max:255',
             'payment_method' => 'required|string',
             'special_instructions' => 'nullable|string',
@@ -103,7 +104,7 @@ class OrderController extends Controller
                 'delivery_address' => $request->delivery_address,
                 'payment_method' => $request->payment_method,
                 'delivery_charge' => $request->delivery_charge ?? 0,
-                'total_price' => $request->total ?? $carts->sum(fn ($cart) => $cart->price * $cart->quantity),
+                'total_price' => $request->total_price ?? $carts->sum(fn ($cart) => $cart->price * $cart->quantity),
             ]);
 
             foreach ($carts as $cart) {
@@ -157,9 +158,17 @@ class OrderController extends Controller
             ->with(['vendor.user'])
             ->findOrFail($id);
 
-        dd($order);
+        $orderItems = OrderItem::where('order_id', $order->id)
+            ->with('food')
+            ->get();
 
-        return view('customer-orders.show', compact('order'));
+        $user = User::where('id', $order->user_id)->first();
+        $homestaurant = \App\Models\VendorApplication::where('id', $order->vendor_application_id)->first();
+        $paymentMethod = \App\Models\PaymentMethod::where('user_id', $homestaurant->user_id)->first();
+        //dd($order);
+        //dd($user, $homestaurant, $paymentMethod, $orderItems);
+
+        return view('show-order', compact('order', 'user', 'homestaurant', 'paymentMethod', 'orderItems'));
     }
 
 }

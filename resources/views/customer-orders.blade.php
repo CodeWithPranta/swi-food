@@ -2,9 +2,13 @@
     <div class="max-w-5xl mx-auto p-6">
         <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">My Orders</h1>
 
+        @if (count($orders) === 0)
+            <p class="text-gray-600 dark:text-gray-400">You have no orders yet.</p>
+        @endif
+
         <div class="grid md:grid-cols-2 gap-6">
             @foreach($orders as $order)
-                <a href="#"
+                <a href="{{ route('customer.orders.show', $order->id) }}"
                    class="block p-6 bg-white dark:bg-gray-800 shadow rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300 hover:scale-[1.02]">
                     <div class="flex justify-between items-center mb-3">
                         <h2 class="text-lg font-semibold text-red-600 dark:text-red-500 underline">

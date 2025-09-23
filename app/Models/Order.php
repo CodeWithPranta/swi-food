@@ -43,6 +43,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function vendorApplication()
+    {
+        return $this->belongsTo(\App\Models\VendorApplication::class, 'vendor_application_id');
+    }
+
 }
 
 ?>

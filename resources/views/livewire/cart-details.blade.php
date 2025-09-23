@@ -35,7 +35,7 @@
     @endif
 
     <!-- Cart Items -->
-    <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your cart</h2>
+    <h1 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your Cart</h1>
 
     @if(count($carts) > 0)
         <table class="table-auto w-full border mb-6 border-gray-300 dark:border-gray-700">
@@ -78,13 +78,13 @@
 
         <!-- Totals -->
         <div class="mb-4 gap-4 text-gray-800 dark:text-gray-200">
-            <p>Subtotal: <b>{{ number_format($subtotal, 2) }} CHF</b></p>
-            <p>Delivery: <b>{{ number_format($delivery_charge, 2) }} CHF</b></p>
-            <p>Total: <b>{{ number_format($total, 2) }} CHF</b></p>
+            <p>Subtotal: <b id="subtotal">{{ number_format($subtotal, 2) }} CHF</b></p>
+            <p>Delivery: <b id="deliveryCharge">{{ number_format($delivery_charge, 2) }} CHF</b></p>
+            <p>Total: <b id="totalPrice">{{ number_format($total, 2) }} CHF</b></p>
         </div>
 
         <!-- ✅ Order Form -->
-        <h2 class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">Order information</h2>
+        <h2 class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">Order Information</h2>
 
         <form action="{{ route('orders.place') }}" method="POST" class="space-y-4" id="orderForm">
         @csrf
@@ -133,16 +133,20 @@
         <!-- Delivery Area -->
         <div id="deliveryAreaWrap">
             <label class="text-gray-700 dark:text-gray-300">Delivery area</label>
-            <select name="delivery_area"
+            <select name="delivery_area" id="deliveryArea"
                     class="border p-2 rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200">
                 <option value="">Select area</option>
                 @foreach($delivery_areas as $area)
-                    <option value="{{ $area->id }}">
+                    <option value="{{ $area->area }}" data-charge="{{ $area->charge }}">
                         {{ $area->area }} ({{ number_format($area->charge, 2) }} CHF)
                     </option>
                 @endforeach
             </select>
         </div>
+         
+        <!-- Hidden Inputs -->
+        <input type="hidden" id="deliveryChargeInput" name="delivery_charge" value="{{ $delivery_charge }}">
+        <input type="hidden" id="totalPriceInput" name="total_price" value="{{ $total }}">
 
         <!-- Delivery Address -->
         <div id="deliveryAddressWrap">
@@ -172,22 +176,65 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const deliveryOption = document.getElementById("deliveryOption");
+            const deliveryArea = document.getElementById("deliveryArea");
             const deliveryAreaWrap = document.getElementById("deliveryAreaWrap");
             const deliveryAddressWrap = document.getElementById("deliveryAddressWrap");
+
+            const deliveryCharge = document.getElementById("deliveryCharge");
+            const totalPrice = document.getElementById("totalPrice");
+
+            const deliveryChargeInput = document.getElementById("deliveryChargeInput");
+            const totalPriceInput = document.getElementById("totalPriceInput");
+
+            const subtotal = parseFloat({{ $subtotal }});
 
             function toggleDeliveryFields() {
                 if (deliveryOption.value === "pickup") {
                     deliveryAreaWrap.style.display = "none";
-                    deliveryAddressWrap.style.display = "none";
-                } else {
-                    deliveryAreaWrap.style.display = "block";
-                    deliveryAddressWrap.style.display = "block";
-                }
-            }
+                        deliveryAddressWrap.style.display = "none";
 
-            deliveryOption.addEventListener("change", toggleDeliveryFields);
-            toggleDeliveryFields();
-        });
+                        deliveryCharge.textContent = "0.00 CHF";
+                        totalPrice.textContent = subtotal.toFixed(2) + " CHF";
+
+                        deliveryChargeInput.value = 0;
+                        totalPriceInput.value = subtotal.toFixed(2);
+                    } else {
+                        deliveryAreaWrap.style.display = "block";
+                        deliveryAddressWrap.style.display = "block";
+                    }
+                }
+
+                function updateTotals() {
+                    let charge = 0;
+
+                    if (deliveryArea && deliveryArea.value) {
+                        const selected = deliveryArea.options[deliveryArea.selectedIndex];
+                        charge = parseFloat(selected.getAttribute("data-charge")) || 0;
+                    }
+
+                    const total = subtotal + charge;
+
+                    deliveryCharge.textContent = charge.toFixed(2) + " CHF";
+                    totalPrice.textContent = total.toFixed(2) + " CHF";
+
+                    deliveryChargeInput.value = charge.toFixed(2);
+                    totalPriceInput.value = total.toFixed(2);
+                }
+
+                deliveryOption.addEventListener("change", () => {
+                    toggleDeliveryFields();
+                    updateTotals();
+                });
+
+                if (deliveryArea) {
+                    deliveryArea.addEventListener("change", updateTotals);
+                }
+
+                // init on page load
+                toggleDeliveryFields();
+                updateTotals();
+            });
     </script>
+
 
 </div>
