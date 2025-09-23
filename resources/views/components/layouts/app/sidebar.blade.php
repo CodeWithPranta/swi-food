@@ -14,11 +14,32 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="shopping-cart" :href="route('cart.details')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Cart Details') }}</flux:navlist.item>
+                   <flux:navlist.item 
+                        icon="home" 
+                        :href="route('dashboard')" 
+                        :current="request()->routeIs('dashboard')" 
+                        wire:navigate>
+                        {{ __('Dashboard') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item 
+                        icon="shopping-cart" 
+                        :href="route('cart.details')" 
+                        :current="request()->routeIs('cart.details')" 
+                        wire:navigate>
+                        {{ __('Cart Details') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item 
+                        icon="banknotes" 
+                        :href="route('orders.customer')" 
+                        :current="request()->routeIs('orders.customer')" 
+                        wire:navigate>
+                        {{ __('Orders') }}
+                    </flux:navlist.item>
+
                 </flux:navlist.group>
             </flux:navlist>
-
             <flux:spacer />
 
             <flux:navlist variant="outline">

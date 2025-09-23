@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/success', [OrderController::class, 'orderSuccess'])->name('orders.success');
     Route::get('/orders', [OrderController::class, 'customerOrders'])->name('orders.customer');
     Route::get('/orders/{id}', [OrderController::class, 'orderDetails'])->name('orders.details');
+    Route::get('/my-orders/{id}', [OrderController::class, 'customerOrderDetails'])->name('customer.orders.show');
     Route::get('/cart', CartDetails::class)->name('cart.details');
 });
 

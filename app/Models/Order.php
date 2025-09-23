@@ -25,6 +25,10 @@ class Order extends Model
         'status',
     ];
 
+    protected $casts = [
+        'expected_receive_time' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

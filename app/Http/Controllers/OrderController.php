@@ -146,9 +146,20 @@ class OrderController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         
-        dd($orders);
+        //dd($orders);
 
         return view('customer-orders', compact('orders'));
+    }
+
+    public function customerOrderDetails($id)
+    {
+        $order = Order::where('user_id', Auth::id())
+            ->with(['vendor.user'])
+            ->findOrFail($id);
+
+        dd($order);
+
+        return view('customer-orders.show', compact('order'));
     }
 
 }
