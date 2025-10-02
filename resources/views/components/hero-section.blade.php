@@ -2,13 +2,15 @@
     style="background-image: url('{{ asset('storage/' . $heroBackground) }}'); background-size: cover;
     background-position: center; background-repeat: no-repeat;">
 
-    <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+    <!-- Overlay for readability -->
+    <div class="absolute inset-0 bg-black/40"></div>
+    <!-- Try bg-black/40 if you want a darker overlay -->
 
     <div class="relative text-center max-w-2xl px-4">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
             {{ $heroTitle }}
         </h1>
-        <p class="text-lg text-gray-700 mb-8">
+        <p class="text-lg text-white mb-8">
             {{ $titleText }}
         </p>
         <form id="location-form" action="{{ route('store-location') }}" method="POST"
@@ -24,6 +26,7 @@
         </form>
     </div>
 
+    <!-- Google Maps Places API Script -->
     <script>
         function initAutocomplete() {
             const input = document.getElementById("location-input");

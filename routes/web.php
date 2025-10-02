@@ -8,10 +8,13 @@ use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\FoodController;
 use App\Livewire\CartDetails;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PageController;
 
 Route::get('/home', function () {
     return view('welcome');
 })->name('home');
+
+Route::get('/page/{slug}', [PageController::class, 'pageView'])->name('page.view');
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/homestaurant-application', [VendorRegistrationController::class, 'showRegistrationForm'])->name('homestaurant.application')->middleware(['auth', 'verified', 'homestaurant']);

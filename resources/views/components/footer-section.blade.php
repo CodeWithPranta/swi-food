@@ -9,7 +9,7 @@
         <!-- Middle: Navigation Links -->
         <div class="flex space-x-6 text-sm my-2">
             @foreach ($pages as $page)
-                <a href="" class="hover:text-white transition">{{ $page->title }}</a>
+                <a href="{{route('page.view', $page->slug)}}" class="hover:text-white transition">{{ $page->title }}</a>
             @endforeach
             <a href="" class="hover:text-white transition">Contact</a>
         </div>

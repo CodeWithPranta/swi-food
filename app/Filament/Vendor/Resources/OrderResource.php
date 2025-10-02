@@ -54,12 +54,12 @@ class OrderResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('total_price')
-                    ->money('bdt', true) // 💡 change currency if needed
+                    ->money('chf', true) // 💡 change currency if needed
                     ->label('Total')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('delivery_charge')
-                    ->money('bdt', true)
+                    ->money('chf', true)
                     ->label('Delivery Charge'),
 
                 Tables\Columns\TextColumn::make('payment_method')
