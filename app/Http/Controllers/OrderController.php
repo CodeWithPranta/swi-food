@@ -26,6 +26,11 @@ class OrderController extends Controller
         $userId = auth()->id();
         $food   = Food::findOrFail($formData['food_id']);
 
+        // 🚫 Prevent ordering own food
+        if ($food->user_id === $userId) {
+            return redirect()->back()->with('error', 'You cannot order your own food.');
+        }
+
         // 🔒 Check if cart already has an item from another vendor
         $existingCartItem = Cart::where('user_id', $userId)->first();
         if ($existingCartItem && $existingCartItem->vendor_application_id !== $food->user_id) {
@@ -67,6 +72,7 @@ class OrderController extends Controller
 
         return redirect()->route('cart.details')->with('success', 'Item added to cart successfully!');
     }
+
 
     public function placeOrder(Request $request)
     {

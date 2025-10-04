@@ -67,6 +67,10 @@
 
         <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 dark:bg-gray-900">
             @foreach($messages as $message)
+                @php
+                    // Ensure created_at exists
+                    $createdAt = $message['created_at'] ?? ($message->created_at ?? now());
+                @endphp
                 <div class="flex {{ $message['sender_id'] === auth()->id() ? 'justify-end' : 'justify-start' }}">
                     <div class="message-container relative max-w-xs">
                         <!-- Small timestamp container (empty initially) -->
@@ -76,13 +80,14 @@
                         <div 
                             class="message px-4 py-2 rounded-2xl shadow text-white cursor-pointer
                                 {{ $message['sender_id'] === auth()->id() ? 'bg-red-500 rounded-br-none' : 'bg-gray-500 rounded-bl-none' }}"
-                            data-timestamp="{{ $message['created_at'] }}"
+                            data-timestamp="{{ $createdAt }}"
                         >
                             {{ $message['message'] }}
                         </div>
                     </div>
                 </div>
             @endforeach
+
         </div>
 
 
@@ -102,8 +107,10 @@
 </div>
 
 <script>
-document.querySelectorAll('#chat-box .message').forEach(message => {
-    message.addEventListener('click', () => {
+document.addEventListener('click', function(e) {
+    // Only handle clicks on messages
+    if (e.target.classList.contains('message')) {
+        const message = e.target;
         const timestampDiv = message.parentElement.querySelector('.timestamp');
         const timestamp = message.getAttribute('data-timestamp');
         if (!timestamp) return;
@@ -114,9 +121,10 @@ document.querySelectorAll('#chat-box .message').forEach(message => {
 
         timestampDiv.innerText = `Sent at: ${formatted}`;
         timestampDiv.style.display = 'block'; // show timestamp
-    });
+    }
 });
 </script>
+
 
 
 

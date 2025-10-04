@@ -14,7 +14,6 @@ class AddToCart extends Component
 
     public function addToCart()
     {
-        // Ensure the user is authenticated
         $user = Auth::user();
 
         if (!$user) {
@@ -22,16 +21,21 @@ class AddToCart extends Component
             return redirect()->route('login');
         }
 
-        // Check if cart already has item from another vendor
+        // 🚫 Prevent adding own food
+        if ($this->food->user_id === $user->id) {
+            $this->dispatch('cartRejected', error: 'You cannot add your own food to the cart.');
+            return;
+        }
+
+        // ✅ Check if cart already has item from another vendor
         $existingCartItem = Cart::where('user_id', $user->id)->first();
 
         if ($existingCartItem && $existingCartItem->vendor_application_id !== $this->food->user_id) {
-            // session()->flash('error', 'You can only order from one homestaurant at a time.');
             $this->dispatch('cartRejected', error: 'You can only order from one homestaurant at a time.');
             return;
         }
 
-        // Update if same food exists
+        // ✅ Update if same food exists
         $cartItem = Cart::where('user_id', $user->id)
             ->where('food_id', $this->food->id)
             ->first();
@@ -45,16 +49,17 @@ class AddToCart extends Component
                 'vendor_application_id' => $this->food->user_id,
                 'food_id' => $this->food->id,
                 'quantity' => $this->quantity,
-                'price' => $this->food->discount == 0 ? $this->food->price : $this->food->price - ($this->food->price * $this->food->discount / 100 ),
+                'price' => $this->food->discount == 0 
+                    ? $this->food->price 
+                    : $this->food->price - ($this->food->price * $this->food->discount / 100),
                 'preference' => $this->preference,
             ]);
         }
 
         $successMessage = 'Item added to plate successfully.';
-        // session()->flash('success', 'Item added to cart.');
-        $this->dispatch('notify', success: $successMessage); // Optional: to update icon
-
+        $this->dispatch('notify', success: $successMessage);
     }
+
 
     public function render()
     {

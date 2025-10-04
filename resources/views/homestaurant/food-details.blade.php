@@ -1,5 +1,24 @@
 <x-landing-layout>
-<div class="bg-gray-100 pt-16">
+<div class="bg-gray-100 pt-16 relative">
+  <!-- Flash Messages -->
+  @if(session('success'))
+      <div id="flash-message" 
+           class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 
+                  bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg 
+                  animate-fade-in-down">
+          {{ session('success') }}
+      </div>
+  @endif
+
+  @if(session('error'))
+      <div id="flash-message" 
+           class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 
+                  bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg 
+                  animate-fade-in-down">
+          {{ session('error') }}
+      </div>
+  @endif
+
   <h1 class="text-4xl pt-8 font-bold text-gray-800 text-center">Food details</h1>
   <div class="container mx-auto px-4 py-4 md:py-8">
     <div class="flex flex-wrap -mx-4">
@@ -109,6 +128,29 @@
             document.getElementById('mainImage').src = src;
         }
   </script>
+  <script>
+    // Auto dismiss flash messages after 3 seconds
+    document.addEventListener("DOMContentLoaded", () => {
+        const flashMessage = document.getElementById("flash-message");
+        if(flashMessage){
+            setTimeout(() => {
+                flashMessage.classList.add("opacity-0", "translate-y-[-10px]");
+                setTimeout(() => flashMessage.remove(), 500); 
+            }, 3000);
+        }
+    });
+  </script>
+
+  <style>
+    /* Smooth fade-in-down animation */
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down {
+        animation: fadeInDown 0.5s ease-out;
+    }
+  </style>
 </div>
 <x-footer-section />
 </x-landing-layout>
