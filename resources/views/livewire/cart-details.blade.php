@@ -35,7 +35,11 @@
     @endif
 
     <!-- Cart Items -->
-    <h1 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Your Cart</h1>
+     <div class="relative mb-6 w-full">
+        <flux:heading size="xl" level="1">{{ __('Your Cart') }}</flux:heading>
+        <flux:subheading size="lg" class="mb-6">{{ __('Manage your cart') }}</flux:subheading>
+        <flux:separator variant="subtle" />
+    </div>
 
     @if(count($carts) > 0)
         <table class="table-auto w-full border mb-6 border-gray-300 dark:border-gray-700">

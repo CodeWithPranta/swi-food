@@ -37,6 +37,13 @@
                         wire:navigate>
                         {{ __('Orders') }}
                     </flux:navlist.item>
+                    <flux:navlist.item 
+                        icon="chat-bubble-oval-left-ellipsis" 
+                        :href="route('chat')" 
+                        :current="request()->routeIs('chat')" 
+                        wire:navigate>
+                        {{ __('Chat') }}
+                    </flux:navlist.item>
 
                 </flux:navlist.group>
             </flux:navlist>

@@ -104,4 +104,16 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return $this->hasMany(DeliveryCharge::class);
     }
 
+    // Messages this user **sent**
+    public function sentMessages()
+    {
+        return $this->hasMany(ChatMessage::class, 'sender_id');
+    }
+
+    // Messages this user **received**
+    public function receivedMessages()
+    {
+        return $this->hasMany(ChatMessage::class, 'receiver_id');
+    }
+
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\FoodController;
 use App\Livewire\CartDetails;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
+use App\Livewire\Chat;
 
 Route::get('/home', function () {
     return view('welcome');
@@ -44,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'orderDetails'])->name('orders.details');
     Route::get('/my-orders/{id}', [OrderController::class, 'customerOrderDetails'])->name('customer.orders.show');
     Route::get('/cart', CartDetails::class)->name('cart.details');
+
+    Route::get('/chat', Chat::class)->name('chat');
 });
 
 require __DIR__.'/auth.php';

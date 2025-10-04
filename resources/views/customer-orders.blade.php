@@ -1,6 +1,10 @@
 <x-layouts.app title="My Orders">
-    <div class="max-w-5xl mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">My Orders</h1>
+    <div class="max-w-5xl mx-auto">
+         <div class="relative mb-6 w-full">
+            <flux:heading size="xl" level="1">{{ __('Orders') }}</flux:heading>
+            <flux:subheading size="lg" class="mb-6">{{ __('Manage your orders and check status') }}</flux:subheading>
+            <flux:separator variant="subtle" />
+        </div>
 
         @if (count($orders) === 0)
             <p class="text-gray-600 dark:text-gray-400">You have no orders yet.</p>
