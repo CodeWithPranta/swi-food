@@ -36,19 +36,32 @@ class CartDetails extends Component
     public function mount()
     {
         $this->loadCart();
-        $this->delivery_areas = DeliveryCharge::all();
+        //$this->delivery_areas = DeliveryCharge::all();
         $this->payment_methods = PaymentMethod::all();
     }
 
     public function loadCart()
     {
-        $this->carts = Cart::with('food')
+        $this->carts = Cart::with('food.user.deliveryCharges')
             ->where('user_id', Auth::id())
-            ->get()
-            ->toArray();
+            ->get();
+
+        if ($this->carts->isNotEmpty()) {
+            // get vendor from first cart item
+            $vendor = $this->carts->first()->food->user;
+
+            $this->delivery_areas = $vendor 
+                ? $vendor->deliveryCharges 
+                : collect(); 
+        } else {
+            $this->delivery_areas = collect();
+        }
+
+        $this->carts = $this->carts->toArray();
 
         $this->calculateTotals();
     }
+
 
     public function updateQuantity($cartId, $quantity)
     {

@@ -16,6 +16,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $date_of_birth = ''; // Use string to handle date input
     public string $password = '';
     public string $password_confirmation = '';
+    public bool $terms = false; // ✅ New property for checkbox
 
     /**
      * Handle an incoming registration request.
@@ -29,8 +30,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'user_type' => ['required'],
             'gender' => ['required'], 
             'date_of_birth' => ['required', 'date', 'before:today'], // Must be a valid past date
+            'terms' => ['accepted'], // ✅ must be checked
         ]);
 
+        // Remove `terms` so it won’t be saved in DB
+        unset($validated['terms']);
 
         $validated['password'] = Hash::make($validated['password']);
 
@@ -44,7 +48,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             return;
         }
 
-        // $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
         // Redirect based on user type
         if ($user->user_type == 2) {
             $this->redirect(route('homestaurant.application'), navigate: true);
@@ -84,6 +87,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <flux:radio value="other" label="Other" />
         </flux:radio.group>
 
+        <!-- Date of Birth -->
         <flux:input type="date" wire:model="date_of_birth" max="{{ now()->toDateString() }}" label="Date of birth" />
 
         <!-- Password -->
@@ -94,6 +98,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <flux:input wire:model="password_confirmation" :label="__('Confirm password')" type="password" required
             autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
 
+        <!-- ✅ Privacy & Terms Checkbox -->
+        <div class="flex items-center gap-2">
+            <input type="checkbox" wire:model="terms" id="terms"
+                class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+            <label for="terms" class="text-sm text-gray-600 dark:text-gray-400">
+                I agree to the 
+                <a href="{{ url('/page/privacy-policy') }}" target="_blank" class="text-red-600 hover:underline">Privacy Policy</a> 
+                and 
+                <a href="{{ url('/page/terms-conditions') }}" target="_blank" class="text-red-600 hover:underline">Terms & Conditions</a>
+            </label>
+        </div>
+        @error('terms') 
+            <p class="text-sm text-red-600 mt-1">{{ $message }}</p> 
+        @enderror
+
+        <!-- Submit Button -->
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary"
                 class="w-full text-white bg-red-700 hover:bg-red-800 cursor-pointer font-semibold">

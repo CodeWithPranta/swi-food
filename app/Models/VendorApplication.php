@@ -56,6 +56,13 @@ class VendorApplication extends Model
         return $this->hasMany(Food::class, 'user_id', 'user_id');
     }
 
+
+    // public function charges()
+    // {
+    //     return $this->hasMany(DeliveryCharge::class, 'user_id');
+    // }
+
+
     protected $appends = [];
 
     /**

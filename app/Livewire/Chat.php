@@ -15,58 +15,79 @@ class Chat extends Component
     public $newMessage;
     public $messages;
 
-   public function mount()
-{
-    $user = auth()->user();
+    public function mount()
+    {
+        $user = auth()->user();
 
-    if ($user->user_type == 2) {
-        // Vendor view: show all users who have sent orders to this vendor
-        $userIds = Order::where('vendor_application_id', $user->vendorApplication->id ?? 0)
-            ->pluck('user_id')
-            ->unique();
+        if ($user->user_type == 2) {
+            // Case: vendor + customer
 
-        // Order users by their last message timestamp
-        $this->homerestaurants = \App\Models\User::whereIn('id', $userIds)
-            ->with(['sentMessages' => function ($q) use ($user) {
+            // 1️⃣ Get all customers who ordered from this vendor
+            $customerIds = Order::where('vendor_application_id', $user->vendorApplication->id ?? 0)
+                ->pluck('user_id')
+                ->unique();
+
+            $customers = \App\Models\User::whereIn('id', $customerIds)
+                ->with(['sentMessages' => function ($q) use ($user) {
+                    $q->where('receiver_id', $user->id)->latest();
+                }, 'receivedMessages' => function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->latest();
+                }])
+                ->get();
+
+            // 2️⃣ Get all vendors this user has ordered from
+            $vendorIds = Order::where('user_id', $user->id)
+                ->pluck('vendor_application_id')
+                ->unique();
+
+            $vendors = \App\Models\VendorApplication::with(['user', 'user.sentMessages' => function ($q) use ($user) {
+                    $q->where('receiver_id', $user->id)->latest();
+                }, 'user.receivedMessages' => function ($q) use ($user) {
+                    $q->where('sender_id', $user->id)->latest();
+                }])
+                ->whereIn('id', $vendorIds)
+                ->get()
+                ->pluck('user'); // extract actual vendor users
+
+            // 3️⃣ Merge customers + vendors
+            $this->homerestaurants = $customers->merge($vendors)
+                ->unique('id') // avoid duplicates
+                ->sortByDesc(function ($contact) use ($user) {
+                    $lastSent = $contact->sentMessages->first()?->created_at;
+                    $lastReceived = $contact->receivedMessages->first()?->created_at;
+                    return max([$lastSent, $lastReceived]);
+                })
+                ->values();
+
+            $this->selectedHomestaurant = $this->homerestaurants->first();
+
+        } else {
+            // Case: regular customer
+            $vendorIds = Order::where('user_id', $user->id)
+                ->pluck('vendor_application_id')
+                ->unique();
+
+            $this->homerestaurants = \App\Models\VendorApplication::with(['user', 'user.sentMessages' => function ($q) use ($user) {
                 $q->where('receiver_id', $user->id)->latest();
-            }, 'receivedMessages' => function ($q) use ($user) {
+            }, 'user.receivedMessages' => function ($q) use ($user) {
                 $q->where('sender_id', $user->id)->latest();
             }])
-            ->get()
-            ->sortByDesc(function ($homestaurant) use ($user) {
-                $lastSent = $homestaurant->sentMessages->first()?->created_at;
-                $lastReceived = $homestaurant->receivedMessages->first()?->created_at;
-                return max([$lastSent, $lastReceived]);
-            })
-            ->values();
+                ->whereIn('id', $vendorIds)
+                ->get()
+                ->sortByDesc(function ($vendor) use ($user) {
+                    $lastSent = $vendor->user->sentMessages->first()?->created_at;
+                    $lastReceived = $vendor->user->receivedMessages->first()?->created_at;
+                    return max([$lastSent, $lastReceived]);
+                })
+                ->pluck('user') // again return vendor users
+                ->values();
 
-        $this->selectedHomestaurant = $this->homerestaurants->first();
+            $this->selectedHomestaurant = $this->homerestaurants->first();
+        }
 
-    } else {
-        // Regular user view: show all vendors they ordered from
-        $vendorIds = Order::where('user_id', $user->id)
-            ->pluck('vendor_application_id')
-            ->unique();
-
-        $this->homerestaurants = \App\Models\VendorApplication::with(['user', 'user.sentMessages' => function ($q) use ($user) {
-            $q->where('receiver_id', $user->id)->latest();
-        }, 'user.receivedMessages' => function ($q) use ($user) {
-            $q->where('sender_id', $user->id)->latest();
-        }])
-            ->whereIn('id', $vendorIds)
-            ->get()
-            ->sortByDesc(function ($vendor) use ($user) {
-                $lastSent = $vendor->user->sentMessages->first()?->created_at;
-                $lastReceived = $vendor->user->receivedMessages->first()?->created_at;
-                return max([$lastSent, $lastReceived]);
-            })
-            ->values();
-
-        $this->selectedHomestaurant = $this->homerestaurants->first();
+        $this->loadMessages();
     }
 
-    $this->loadMessages();
-}
 
 
     public function selectHomestaurant($id)
