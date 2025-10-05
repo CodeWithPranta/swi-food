@@ -36,7 +36,7 @@
             <div onclick="window.location.href='{{ route('homestaurant.show', [$vendor->id, Str::slug($vendor->kitchen_name)]) }}'" class="bg-white rounded-xl shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
                 <div class="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img class="w-full h-full object-cover" src="{{ asset('storage/' . $vendor->cover_photo) }}" alt="Cover photo of {{$vendor->kitchen_name}}">
-                    @php
+                @php
                     $currentDay = strtolower(now()->timezone('Europe/Zurich')->format('l')); // 'monday', etc.
                     $currentTime = now()->timezone('Europe/Zurich')->format('H:i');
 
@@ -53,11 +53,15 @@
                 </div>
                 </div>
                 <div class="p-4 sm:p-5">
+                    @php
+                    $ratingsCount = count($vendor->ratings);
+                    $avgRating = $ratingsCount > 0 ? number_format($vendor->ratings->avg('rating'), 1) : null;
+                    @endphp
                     <div class="flex justify-between items-start mb-2">
                         <h2 class="text-lg sm:text-xl font-bold text-gray-900 truncate pr-4">{{$vendor->kitchen_name}}</h2>
                         <div class="flex items-center text-sm font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded-full">
                             <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.17c.969 0 1.371 1.24.588 1.81l-3.38 2.459a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.538 1.118l-3.38-2.459a1 1 0 00-1.176 0l-3.38 2.459c-.783.57-1.838-.197-1.538-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.05 9.397c-.783-.57-.381-1.81.588-1.81h4.17a1 1 0 00.95-.69l1.286-3.96z"></path></svg>
-                            4.7 <span class="text-gray-500 ml-1">(500+)</span>
+                            {{$avgRating}} <span class="text-gray-500 ml-1">({{$ratingsCount}}+)</span>
                         </div>
                     </div>
                     @php

@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Profession;
+use App\Models\Food;
+use App\Models\Rating;
 
 class VendorApplication extends Model
 {
@@ -54,6 +60,11 @@ class VendorApplication extends Model
         // This assumes that the 'user_id' in the Food model corresponds to the 'user_id' in VendorApplication
         // Adjust the foreign key and local key as necessary based on your database schema
         return $this->hasMany(Food::class, 'user_id', 'user_id');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'vendor_application_id');
     }
 
 

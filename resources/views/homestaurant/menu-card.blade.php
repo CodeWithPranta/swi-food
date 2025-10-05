@@ -184,6 +184,80 @@
             </div>
         </div>
 
+       @php
+            $ratings = $vendor->ratings;
+            $ratingsCount = $ratings->count();
+            $avgRating = $ratingsCount > 0 ? number_format($ratings->avg('rating'), 1) : 0;
+        @endphp
+
+        {{-- Overall Rating --}}
+        <div class="text-center mb-6 mt-12 max-w-screen-lg mx-auto px-4">
+            <div class="flex justify-center items-center text-yellow-500 mb-2">
+                {{-- Show average stars --}}
+                @for ($i = 1; $i <= 5; $i++)
+                    <svg class="w-6 h-6 {{ $i <= $avgRating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 
+                                3.974a1 1 0 00.95.69h4.18c.969 0 
+                                1.371 1.24.588 1.81l-3.39 2.462a1 
+                                1 0 00-.364 1.118l1.287 
+                                3.974c.3.921-.755 1.688-1.54 
+                                1.118l-3.39-2.462a1 1 0 
+                                00-1.175 0l-3.39 
+                                2.462c-.784.57-1.838-.197-1.539-1.118l1.286-3.974a1 
+                                1 0 00-.364-1.118L2.225 
+                                9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 
+                                1 0 00.951-.69l1.285-3.974z"/>
+                    </svg>
+                @endfor
+            </div>
+            <p class="font-semibold text-gray-800">
+                {{ $avgRating }} / 5 ({{ $ratingsCount }} reviews)
+            </p>
+        </div>
+
+        {{-- Individual Reviews --}}
+        <div class="space-y-6 max-w-screen-lg mx-auto px-4 mb-16">
+            @forelse ($ratings as $rating)
+                <div class="border-b pb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <img src="{{ $rating->user->profile_photo_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($rating->user->name) }}" 
+                                alt="{{ $rating->user->name }}" 
+                                class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ $rating->user->name }}</p>
+                                <div class="flex">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg class="w-4 h-4 {{ $i <= $rating->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 
+                                                    1.902 0l1.286 3.974a1 1 0 
+                                                    00.95.69h4.18c.969 0 1.371 1.24.588 
+                                                    1.81l-3.39 2.462a1 1 0 
+                                                    00-.364 1.118l1.287 
+                                                    3.974c.3.921-.755 1.688-1.54 
+                                                    1.118l-3.39-2.462a1 1 0 
+                                                    00-1.175 0l-3.39 
+                                                    2.462c-.784.57-1.838-.197-1.539-1.118l1.286-3.974a1 
+                                                    1 0 00-.364-1.118L2.225 
+                                                    9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 
+                                                    1 0 00.951-.69l1.285-3.974z"/>
+                                        </svg>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-500">{{ $rating->created_at->diffForHumans() }}</span>
+                    </div>
+                    @if($rating->review)
+                        <p class="text-gray-700 mt-2">{{ $rating->review }}</p>
+                    @endif
+                </div>
+            @empty
+                <p class="text-gray-500 text-center">No reviews yet.</p>
+            @endforelse
+         </div>
     </div>
     </section>
 

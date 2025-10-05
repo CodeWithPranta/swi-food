@@ -171,10 +171,13 @@ class OrderController extends Controller
         $user = User::where('id', $order->user_id)->first();
         $homestaurant = \App\Models\VendorApplication::where('id', $order->vendor_application_id)->first();
         $paymentMethod = \App\Models\PaymentMethod::where('user_id', $homestaurant->user_id)->first();
-        //dd($order);
-        //dd($user, $homestaurant, $paymentMethod, $orderItems);
 
-        return view('show-order', compact('order', 'user', 'homestaurant', 'paymentMethod', 'orderItems'));
+        // Fetch rating given by the current user for this homestaurant
+        $rating = \App\Models\Rating::where('user_id', Auth::id())
+            ->where('vendor_application_id', $homestaurant->id)
+            ->first(); // Get the rating record if exists
+
+        return view('show-order', compact('order', 'user', 'homestaurant', 'paymentMethod', 'orderItems', 'rating'));
     }
 
 }

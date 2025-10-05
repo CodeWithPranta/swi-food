@@ -48,7 +48,6 @@ class Order extends Model
     {
         return $this->belongsTo(\App\Models\VendorApplication::class, 'vendor_application_id');
     }
-
 }
 
 ?>

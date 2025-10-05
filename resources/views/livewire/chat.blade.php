@@ -53,7 +53,7 @@
             </div>
             @endif
             @else
-            <p class="text-gray-700 dark:text-gray-200">No order yet</p>
+            <p class="text-gray-700 dark:text-gray-300">No order yet.</p>
             @endif
             <!-- 3 Dot Menu Button (mobile only) -->
             <button class="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"

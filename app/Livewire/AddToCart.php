@@ -23,7 +23,7 @@ class AddToCart extends Component
 
         // 🚫 Prevent adding own food
         if ($this->food->user_id === $user->id) {
-            $this->dispatch('cartRejected', error: 'You cannot add your own food to the cart.');
+            $this->dispatch('cartRejected', error: 'You can not add your own food to the cart.');
             return;
         }
 

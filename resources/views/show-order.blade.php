@@ -14,12 +14,11 @@
         <div>
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Order Progress</h3>
 
-            {{-- 🌐 Desktop / Tablet (Horizontal) --}}
+            {{-- 🌐 Desktop / Tablet --}}
             <div class="hidden md:block relative">
                 <div class="absolute top-5 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 <div class="absolute top-5 left-0 h-1 bg-gradient-to-r from-yellow-400 via-blue-400 to-green-500 rounded transition-all duration-500"
-                    style="width: {{ ($currentIndex !== false ? ($currentIndex / (count($steps) - 1)) * 100 : 0) }}%">
-                </div>
+                     style="width: {{ ($currentIndex !== false ? ($currentIndex / (count($steps) - 1)) * 100 : 0) }}%"></div>
 
                 <div class="flex justify-between relative z-10">
                     @foreach($steps as $index => $step)
@@ -71,7 +70,7 @@
             </div>
         </div>
 
-        {{-- 🧑 Customer + Restaurant Info --}}
+        {{-- 🧑 Customer + Homestaurant Info --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {{-- Customer Info --}}
             <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
@@ -135,7 +134,6 @@
 
         {{-- 💳 Payment + Totals --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {{-- Payment --}}
             <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
                 <h3 class="text-lg font-semibold mb-4">Payment Method</h3>
                 <p class="text-sm sm:text-base">{{ ucfirst($paymentMethod->bank_name ?? 'Not specified') }}</p>
@@ -144,7 +142,6 @@
                 </div>
             </div>
 
-            {{-- Summary --}}
             <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
                 <h3 class="text-lg font-semibold mb-4">Summary</h3>
                 <div class="space-y-2 text-sm sm:text-base">
@@ -158,5 +155,64 @@
                 </div>
             </div>
         </div>
+
+        {{-- ⭐ Rate Homestaurant --}}
+    <div class="max-w-6xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Rate the Homestaurant</h2>
+
+        @if(session('success'))
+            <div class="mb-4 text-green-600 dark:text-green-400">{{ session('success') }}</div>
+        @endif
+
+        <form action="{{ route('rating.submit', $order->id) }}" method="POST">
+            @csrf
+
+            <div class="flex items-center mb-4 space-x-1" id="rating-stars">
+                @php
+                    $currentRating = $rating->rating ?? 0;
+                @endphp
+
+                @for ($i = 1; $i <= 5; $i++)
+                    <label class="relative">
+                        <input type="radio" name="rating" value="{{ $i }}" class="hidden" {{ $i == $currentRating ? 'checked' : '' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                             class="w-10 h-10 cursor-pointer transition-colors duration-200 {{ $i <= $currentRating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600' }}">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.462a1 1 0 00-.364 1.118l1.287 3.974c.3.921-.755 1.688-1.54 1.118l-3.39-2.462a1 1 0 00-1.175 0l-3.39 2.462c-.784.57-1.838-.197-1.539-1.118l1.286-3.974a1 1 0 00-.364-1.118L2.225 9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.951-.69l1.285-3.974z"/>
+                        </svg>
+                    </label>
+                @endfor
+            </div>
+
+            <textarea name="review" rows="4" placeholder="Write your review..."
+                      class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 mb-4 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">{{ old('review', $rating->review ?? '') }}</textarea>
+
+            <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-700 transition">
+                Submit Review
+            </button>
+        </form>
     </div>
+
+    <script>
+        const starsContainer = document.getElementById('rating-stars');
+        const stars = starsContainer.querySelectorAll('input[name="rating"]');
+
+        stars.forEach((star) => {
+            star.addEventListener('change', () => {
+                const selectedValue = parseInt(star.value);
+                stars.forEach((s) => {
+                    const svg = s.nextElementSibling;
+                    if (parseInt(s.value) <= selectedValue) {
+                        svg.classList.add('text-yellow-400');
+                        svg.classList.remove('text-gray-300', 'dark:text-gray-600');
+                    } else {
+                        svg.classList.remove('text-yellow-400');
+                        svg.classList.add('text-gray-300', 'dark:text-gray-600');
+                    }
+                });
+            });
+        });
+    </script>
+    </div>
+
+    
 </x-layouts.app>
