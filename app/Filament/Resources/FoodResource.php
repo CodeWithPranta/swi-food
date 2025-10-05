@@ -97,6 +97,10 @@ class FoodResource extends Resource
                     ->maxValue(100)
                     ->default(1)
                     ->required(),
+                Forms\Components\TextInput::make('amount')
+                    ->numeric()
+                    ->default(0)
+                    ->required(),
                 Select::make('unit_id')->relationship('unit', 'name')->required(),
                 Forms\Components\TextInput::make('production_cost')
                     ->numeric()

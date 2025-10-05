@@ -7,11 +7,7 @@
     >
         <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
             <div class="font-bold text-gray-700 dark:text-gray-200">
-                @if (auth()->user()->user_type == "2")
-                  Customers 
-                @else
-                  Homestaurants 
-                @endif
+                Chats
             </div>
             <!-- Close button (mobile only) -->
             <button class="md:hidden text-gray-500 dark:text-gray-300" @click="open=false">✖</button>

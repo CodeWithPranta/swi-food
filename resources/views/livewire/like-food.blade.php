@@ -1,4 +1,4 @@
-<button wire:click="toggleLike"
+<button wire:click="toggleLike" type="button"
     class="bg-gray-200 flex gap-2 items-center text-gray-800 px-6 py-2 cursor-pointer rounded-full hover:bg-gray-300 focus:outline-none">
 
     @if ($isLiked)

@@ -42,6 +42,7 @@
       <!-- Product Details -->
       <div class="w-full md:w-1/2 px-4">
         <h2 class="text-3xl font-bold mb-2">{{$food->name}}</h2>
+        <p class="text-sm pb-2 italic">{{$food->amount}} {{$food->unit->name}}</p>
         <p class="text-gray-700 mb-4">Cooked by <span class="font-semibold">{{$vendor->chef_name}}</span></p>
         <div class="mb-4">
           @if ($food->discount > 0 )

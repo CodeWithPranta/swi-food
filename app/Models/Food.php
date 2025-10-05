@@ -18,6 +18,7 @@ class Food extends Model
         'images',
         'description',
         'quantity',
+        'amount',
         'production_cost',
         'price',
         'discount',

@@ -28,9 +28,8 @@ class FoodResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
+                Forms\Components\Hidden::make('user_id')
                     ->default(Auth::id())
-                    ->readOnly()
                     ->required(),
                 Forms\Components\Toggle::make('is_visible')
                     ->label('Visibility')
@@ -88,6 +87,10 @@ class FoodResource extends Resource
                     ->minValue(1)
                     ->maxValue(100)
                     ->default(1)
+                    ->required(),
+                Forms\Components\TextInput::make('amount')
+                    ->numeric()
+                    ->default(0)
                     ->required(),
                 Forms\Components\Select::make('unit_id')->relationship('unit', 'name')->required(),
                 Forms\Components\TextInput::make('production_cost')

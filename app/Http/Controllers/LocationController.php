@@ -94,30 +94,59 @@ class LocationController extends Controller
     }
     // Show the vendor's menu card
 
+    // public function show($id, $kitchen_name)
+    // {
+    //     $vendor = VendorApplication::with(['foods.category'])->findOrFail($id);
+
+    //     $expectedSlug = Str::slug($vendor->kitchen_name);
+    //     if ($expectedSlug !== $kitchen_name) {
+    //         abort(404);
+    //     }
+
+    //     // Extract all foods
+    //     $vendorFoods = $vendor->foods;
+
+    //     // Build the category mapping: ['Category Name' => category_id]
+    //     $vendorFoodCategories = $vendorFoods
+    //         ->pluck('category') // Get all categories (some may be duplicate)
+    //         ->unique('id') // Remove duplicates by ID
+    //         ->mapWithKeys(function ($category) {
+    //             return [$category->name => $category->id];
+    //         });
+
+    //     return view('homestaurant.menu-card', compact('vendor', 'vendorFoods', 'vendorFoodCategories'));
+    // }
+
     public function show($id, $kitchen_name)
     {
         $vendor = VendorApplication::with(['foods.category'])->findOrFail($id);
 
+        // ✅ Ensure correct slug in the URL
         $expectedSlug = Str::slug($vendor->kitchen_name);
         if ($expectedSlug !== $kitchen_name) {
             abort(404);
         }
 
-        // Extract all foods
+        // ✅ Get all foods of the vendor
         $vendorFoods = $vendor->foods;
 
-        // Build the category mapping: ['Category Name' => category_id]
+        // ✅ Build category mapping safely (ignore foods without category)
         $vendorFoodCategories = $vendorFoods
-            ->pluck('category') // Get all categories (some may be duplicate)
-            ->unique('id') // Remove duplicates by ID
+            ->pluck('category')
+            ->filter() // remove null categories
+            ->unique('id')
             ->mapWithKeys(function ($category) {
-                return [$category->name => $category->id];
+                return [$category->name ?? 'Uncategorized' => $category->id ?? 0];
             });
 
-        return view('homestaurant.menu-card', compact('vendor', 'vendorFoods', 'vendorFoodCategories'));
+        return view('homestaurant.menu-card', [
+            'vendor' => $vendor,
+            'vendorFoods' => $vendorFoods,
+            'vendorFoodCategories' => $vendorFoodCategories,
+        ]);
     }
 
-            
+    
     public function storeOrUpdateLocation(Request $request)
     {
         $userId = auth()->id();
