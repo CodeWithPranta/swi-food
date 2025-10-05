@@ -190,6 +190,7 @@
                 Submit Review
             </button>
         </form>
+        <p class="py-4">Any issue with the order? <a href="{{route('reports.create')}}" class="text-red-500 font-bold underline">Report</a> on the order.</p>
     </div>
 
     <script>

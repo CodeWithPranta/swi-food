@@ -11,10 +11,15 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Livewire\Chat;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/home', function () {
     return view('welcome');
 })->name('home');
+
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/page/{slug}', [PageController::class, 'pageView'])->name('page.view');
 
@@ -50,6 +55,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', Chat::class)->name('chat');
 
     Route::post('/orders/{order}/rate', [RatingController::class, 'submit'])->name('rating.submit');
+
+    Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
 });
 
 require __DIR__.'/auth.php';

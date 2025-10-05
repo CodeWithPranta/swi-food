@@ -11,7 +11,7 @@
             @foreach ($pages as $page)
                 <a href="{{route('page.view', $page->slug)}}" class="hover:text-white transition">{{ $page->title }}</a>
             @endforeach
-            <a href="" class="hover:text-white transition">Contact</a>
+            <a href="{{route('contact.create')}}" class="hover:text-white transition">Contact</a>
         </div>
 
         <!-- Right: Social Icons -->
