@@ -56,6 +56,14 @@
                             @auth('web')
                                 <x-dropdown-link
                                     href="{{ route('settings.profile') }}">{{ __('Profile') }}</x-dropdown-link>
+                                    <!-- <form action="{{route('logout')}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="pl-4 flex cursor-pointer border w-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z" />
+                                            </svg> Logout
+                                        </button>
+                                    </form> -->
                                 @if (auth()->user()->user_type === 2 && optional(auth()->user()->vendorApplication)->is_approved === 1)
                                     <x-dropdown-link
                                         href="{{ route('filament.vendor.pages.dashboard') }}">{{ __('Homestaurant Dashboard') }}</x-dropdown-link>

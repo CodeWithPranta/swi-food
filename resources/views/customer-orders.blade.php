@@ -12,9 +12,9 @@
 
         <div class="grid md:grid-cols-2 gap-6">
             @foreach($orders as $order)
-                <a href="{{ route('customer.orders.show', $order->id) }}"
+                <div
                    class="block p-6 bg-white dark:bg-gray-800 shadow rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-300 hover:scale-[1.02]">
-                    <div class="flex justify-between items-center mb-3">
+                    <a href="{{ route('customer.orders.show', $order->id) }}" class="flex justify-between items-center mb-3">
                         <h2 class="text-lg font-semibold text-red-600 dark:text-red-500 underline">
                             Order #{{ $order->id }}
                         </h2>
@@ -32,10 +32,10 @@
                         <span class="px-3 py-1 text-sm font-medium rounded-full {{ $statusColors[$order->status] ?? 'bg-gray-100 text-gray-700 border border-gray-300' }}">
                             {{ ucfirst($order->status) }}
                         </span>
-                    </div>
+                    </a>
 
                     <p class="text-gray-700 dark:text-gray-300 mb-1">
-                        <strong>Homestaurant:</strong> {{ $order->vendor->user->name }}
+                        <strong>Homestaurant:</strong> {{ $order->vendor->kitchen_name }}
                     </p>
                     <p class="text-gray-700 dark:text-gray-300 mb-1">
                         <strong>Total:</strong> {{ number_format($order->total_price, 2) }} CHF
@@ -43,7 +43,8 @@
                     <p class="text-gray-500 dark:text-gray-400 text-sm">
                         Expected on {{ $order->expected_receive_time->format('M d, Y H:i') }}
                     </p>
-                </a>
+                    <p class="text-gray-700 dark:text-gray-300 py-4">Now get the homestaurant on chat list! <a href="{{route('chat')}}" class="text-red-500 font-extrabold underline">Live Chat</a></p>
+                </div>
             @endforeach
         </div>
 
