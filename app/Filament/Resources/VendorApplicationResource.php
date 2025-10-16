@@ -201,6 +201,12 @@ class VendorApplicationResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+              ->orderBy('created_at', 'desc');
+    }
+
     public static function getRelations(): array
     {
         return [

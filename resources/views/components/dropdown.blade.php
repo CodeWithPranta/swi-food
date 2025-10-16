@@ -1,6 +1,6 @@
 <li>
     <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
-        class="flex items-center justify-between w-full py-2 pl-3 pr-4 text-white rounded hover:text-gray-200 md:hover:bg-transparent md:border-0 md:hover:text-gray-200 cursor-pointer md:p-0 md:w-auto">{{ $dropdown_name }}
+        class="flex items-center justify-between w-full py-2 pl-3 pr-4 text-gray-900 rounded hover:text-gray-950 md:hover:bg-transparent md:border-0 md:hover:text-gray-900 cursor-pointer md:p-0 md:w-auto">{{ $dropdown_name }}
         <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
@@ -9,8 +9,8 @@
         </svg></button>
     <!-- Dropdown menu -->
     <div id="dropdownNavbar"
-        class="w-3/4 sm:w-3/5 md:w-3/6 lg:w-2/7 z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-        <ul class="py-2 text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+        class="w-3/4 sm:w-3/5 md:w-3/6 lg:w-2/7 z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow">
+        <ul class="py-2 text-gray-900 hover:text-gray-950" aria-labelledby="dropdownLargeButton">
             {{ $slot }}
         </ul>
     </div>

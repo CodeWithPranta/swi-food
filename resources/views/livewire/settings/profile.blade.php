@@ -92,8 +92,8 @@ new class extends Component {
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
              <!-- Profile Image Upload with Preview and Full-Size Popup -->
             <div x-data="{ showModal: false }">
-                <label for="profile_image" class="block text-sm font-medium text-zinc-800">{{ __('Profile Image') }}</label>
-                <input type="file" wire:model="profile_image" id="profile_image" class="mt-1 block w-full">
+                <label for="profile_image" class="block text-sm font-medium text-zinc-800 dark:text-gray-200">{{ __('Profile Image') }}</label>
+                <input type="file" wire:model="profile_image" id="profile_image" class="mt-1 block w-full" accept="image/*" />
 
                 @if ($profile_image)
                     @if (is_string($profile_image))
@@ -161,9 +161,9 @@ new class extends Component {
             </div>
             <div>
                 <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Phone</label>
                 <div class="flex rounded-md shadow-sm">
-                    <span class="inline-flex items-center px-3 rounded-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                    <span class="inline-flex items-center px-3 rounded-md border border-r-0 border-zinc-300 dark:border-zinc-600 bg-gray-50 text-gray-500 dark:bg-zinc-700 dark:text-gray-200 text-sm">
                         +41
                     </span>
                     <flux:input

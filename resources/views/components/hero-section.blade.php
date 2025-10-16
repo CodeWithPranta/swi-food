@@ -1,18 +1,21 @@
-<section class="relative flex items-center justify-center w-full h-[90vh] bg-gray-50 pt-24"
-    style="background-image: url('{{ asset('storage/' . $heroBackground) }}'); background-size: cover;
-    background-position: center; background-repeat: no-repeat;">
-
-    <!-- Overlay for readability -->
+<section 
+    class="relative flex items-center justify-center h-screen bg-gray-50 pt-24 overflow-hidden"
+    style="background-image: url('{{ asset('storage/' . $heroBackground) }}'); 
+           background-size: cover;
+           background-position: center; 
+           background-repeat: no-repeat;">
+    
+    <!-- Optional dark overlay for better text contrast -->
     <div class="absolute inset-0 bg-black/40"></div>
-    <!-- Try bg-black/40 if you want a darker overlay -->
 
-    <div class="relative text-center max-w-2xl px-4">
+    <div class="relative text-center max-w-2xl px-4 z-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
             {{ $heroTitle }}
         </h1>
         <p class="text-lg text-white mb-8">
             {{ $titleText }}
         </p>
+
         <form id="location-form" action="{{ route('store-location') }}" method="POST"
             class="flex flex-col sm:flex-row items-center justify-center gap-4">
             @csrf
@@ -26,7 +29,6 @@
         </form>
     </div>
 
-    <!-- Google Maps Places API Script -->
     <script>
         function initAutocomplete() {
             const input = document.getElementById("location-input");
@@ -40,20 +42,18 @@
                 document.getElementById("location-input").value = place.formatted_address;
                 document.getElementById("search-btn").disabled = false;
                 document.getElementById("search-btn").classList.remove("disabled");
-
                 document.getElementById("location-lat").value = latitude;
                 document.getElementById("location-lng").value = longitude;
             });
 
-            const searchBtn = document.getElementById("search-btn");
-
-            searchBtn.addEventListener("click", () => {
+            document.getElementById("search-btn").addEventListener("click", () => {
                 document.getElementById("location-form").submit();
             });
         }
     </script>
 
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initAutocomplete">
+    <script 
+        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initAutocomplete" 
+        async defer>
     </script>
 </section>
