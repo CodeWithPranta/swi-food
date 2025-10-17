@@ -14,11 +14,16 @@ class FooterSection extends Component
     public ?string $copyrightText;
     public ?string $favicon;
     public ?object $pages;
+    public ?object $menuPages;
     public ?array $socialLinks;
     public function __construct()
     {
-        $pages = \App\Models\Page::all();
+        $pages = \App\Models\Page::where('menu_position', 'footer')
+            ->where('is_active', true)->get();
         $this->pages = $pages;
+        $menuPages = \App\Models\Page::where('menu_position', 'inside_menu')
+            ->where('is_active', true)->get();
+        $this->menuPages = $menuPages;
         $setting = \App\Models\Setting::first();
         $this->favicon = $setting?->favicon;
         $this->copyrightText = $setting?->copyright_text ?? '2025 Homestaurant. All rights reserved.';

@@ -8,8 +8,8 @@
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="mr-5 flex items-center space-x-2" wire:navigate>
-                <x-secondary-logo class="dark:hidden" />
-                <x-logo class="hidden dark:block" />
+                <x-secondary-logo class="hidden dark:block" />
+                <x-logo class="dark:hidden" />
             </a>
 
             <flux:navlist variant="outline">

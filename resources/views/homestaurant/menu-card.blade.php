@@ -46,7 +46,7 @@
                     alt="Cover of {{ $vendor->kitchen_name }}"
                     class="w-full h-full object-cover">
                 <div class="absolute left-1/2 bottom-[-60px] transform -translate-x-1/2">
-                    <img src="{{ asset($vendor->user->profile_image != null ? 'storage/' . $vendor->user->profile_image : 'images/default-profile.jpg') }}"
+                    <img src="{{ asset($vendor->user->profile_image != null ? 'storage/' . $vendor->user->profile_image : 'images/default-profile.png') }}"
                         class="w-28 h-28 md:w-40 md:h-40 rounded-full border-4 border-white shadow-lg object-cover"
                         alt="{{ $vendor->user->name }}">
                 </div>
@@ -62,6 +62,11 @@
                 {{ $vendor->chef_name ?? $vendor->user->name }}
             </p>
 
+            <p class="text-lg text-gray-600">
+                <span class="font-semibold text-gray-700">Profession:</span>
+                {{ $vendor->profession['name'] }}
+            </p>
+
             <p class="text-sm text-gray-700 mt-1">
                 <svg class="inline-block w-4 h-4 mb-1 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13 21.314l-4.657-4.657a8 8 0 1111.314 0z"/>
@@ -72,6 +77,7 @@
 
             @php $links = $vendor->links; @endphp
 
+            {{-- Social Links --}}
             @if(is_array($links))
                 <div class="flex justify-center gap-4 mt-4">
                     @foreach($links as $item)
@@ -84,8 +90,23 @@
                     @endforeach
                 </div>
             @endif
+
+            {{-- Call Vendor Button --}}
+            @if(!empty($vendor->phone_number))
+                <div class="mt-2">
+                    <a href="tel:{{ $vendor->phone_number }}"
+                    class="inline-flex items-center gap-2 bg-zinc-600 text-white px-5 py-2.5 rounded-full hover:bg-red-600 transition-all duration-200 shadow-md hover:shadow-lg">
+                        <!-- Beautiful phone icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.003 5.884 3.114-1.436a1 1 0 0 1 1.108.21l2.24 2.24a1 1 0 0 1 .21 1.108L7.884 10.2a13.042 13.042 0 0 0 6.416 6.416l2.193-0.791a1 1 0 0 1 1.108.21l2.24 2.24a1 1 0 0 1 .21 1.108l-1.437 3.114a1 1 0 0 1-.93.604A17 17 0 0 1 2.607 6.814a1 1 0 0 1 .604-.93z"/>
+                        </svg>
+                        Call Now
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
+
 
     {{-- Menu Section --}}
         <div class="my-10 max-w-screen-lg mx-auto px-4 py-2 bg-cover bg-center text-white" style="background-image: url('{{ asset('images/bg-yellow.jpg') }}')">

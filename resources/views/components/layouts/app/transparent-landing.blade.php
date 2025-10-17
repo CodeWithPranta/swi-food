@@ -22,7 +22,7 @@
 </head>
 
 <body class="bg-gray-50">
-    <nav class="fixed top-0 left-0 z-20 w-full bg-transparent" id="navbar">
+    <nav class="absolute top-0 left-0 z-20 w-full bg-transparent" id="navbar">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
             <x-logo class="w-40 md:w-48" />
             <div class="flex md:order-2">

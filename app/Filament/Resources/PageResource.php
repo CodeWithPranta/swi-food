@@ -31,6 +31,16 @@ class PageResource extends Resource
                     ->unique(ignoreRecord:true),
                 Forms\Components\RichEditor::make('content')
                     ->columnSpanFull(),
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Is Active')
+                    ->default(true),
+                Forms\Components\Select::make('menu_position')
+                    ->label('Menu Position')
+                    ->options([
+                        'footer' => 'Footer',
+                        'inside_menu' => 'Inside Menu',
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -50,6 +60,15 @@ class PageResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('menu_position')
+                    ->label('Menu Position')
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
                 //
