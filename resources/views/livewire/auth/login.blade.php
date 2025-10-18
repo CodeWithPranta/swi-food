@@ -86,6 +86,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <x-auth-session-status class="text-center" :status="session('status')" />
 
     <form wire:submit="login" class="flex flex-col gap-6">
+        <a href="{{ route('auth.google') }}">
+            <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png">
+        </a>
         <!-- Email Address -->
         <flux:input wire:model="email" :label="__('Email address')" type="email" required autofocus autocomplete="email"
             placeholder="email@example.com" />

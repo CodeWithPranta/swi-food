@@ -182,9 +182,9 @@ new class extends Component {
             <!-- User Gender -->
             <div class="mt-6">
                 <flux:radio.group wire:model="gender" label="Gender" variant="segmented">
-                <flux:radio value="male" label="Male" />
-                <flux:radio value="female" label="Female" />
-                <flux:radio value="other" label="Other" />
+                <flux:radio value="male" label="Male" class="bg-zinc-300 dark:bg-zinc-800" />
+                <flux:radio value="female" label="Female" class="bg-zinc-300 dark:bg-zinc-800" />
+                <flux:radio value="other" label="Other" class="bg-zinc-300 dark:bg-zinc-800" />
                 </flux:radio.group>
             </div>
 

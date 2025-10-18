@@ -6,7 +6,7 @@
            background-repeat: no-repeat;">
     
     <!-- Optional dark overlay for better text contrast -->
-    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0 bg-yellow-500/20"></div>
 
     <div class="relative text-center max-w-2xl px-4 z-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">

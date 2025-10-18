@@ -40,6 +40,7 @@ class DeliveryChargeResource extends Resource
                     ->minLength(3)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('charge')
+                    ->prefix('CHF')
                     ->required()
                     ->numeric(),
             ]);

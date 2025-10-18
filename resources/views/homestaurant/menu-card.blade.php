@@ -95,7 +95,7 @@
             @if(!empty($vendor->phone_number))
                 <div class="mt-2">
                     <a href="tel:{{ $vendor->phone_number }}"
-                    class="inline-flex items-center gap-2 bg-zinc-600 text-white px-5 py-2.5 rounded-full hover:bg-red-600 transition-all duration-200 shadow-md hover:shadow-lg">
+                    class="inline-flex items-center gap-2 bg-zinc-700 text-white px-5 py-2.5 rounded-full hover:bg-zinc-800 transition-all duration-200 shadow-md hover:shadow-lg">
                         <!-- Beautiful phone icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m2.003 5.884 3.114-1.436a1 1 0 0 1 1.108.21l2.24 2.24a1 1 0 0 1 .21 1.108L7.884 10.2a13.042 13.042 0 0 0 6.416 6.416l2.193-0.791a1 1 0 0 1 1.108.21l2.24 2.24a1 1 0 0 1 .21 1.108l-1.437 3.114a1 1 0 0 1-.93.604A17 17 0 0 1 2.607 6.814a1 1 0 0 1 .604-.93z"/>

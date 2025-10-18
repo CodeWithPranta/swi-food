@@ -13,10 +13,11 @@ use App\Livewire\Chat;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GoogleController;
 
-Route::get('/home', function () {
-    return view('welcome');
-})->name('home');
+// Route::get('/home', function () {
+//     return view('welcome');
+// })->name('home');
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -36,6 +37,11 @@ Route::get('/food-details/{id}/{name}', [FoodController::class, 'foodDetails'])-
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::controller(GoogleController::class)->group(function(){
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::redirect('settings', 'settings/profile');

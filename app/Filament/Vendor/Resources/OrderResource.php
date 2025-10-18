@@ -10,6 +10,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
 class OrderResource extends Resource
 {
@@ -58,14 +60,6 @@ class OrderResource extends Resource
                     ->label('Total')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('delivery_charge')
-                    ->money('chf', true)
-                    ->label('Delivery Charge'),
-
-                Tables\Columns\TextColumn::make('payment_method')
-                    ->label('Payment Method')
-                    ->sortable(),
-
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors([
                         'warning' => 'pending',
@@ -91,6 +85,7 @@ class OrderResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 // vendors see order details
             ])
             ->bulkActions([
@@ -104,6 +99,7 @@ class OrderResource extends Resource
     {
         return [
             // you could add RelationManagers here (like order items)
+            OrderResource\RelationManagers\ItemsRelationManager::class,
         ];
     }
 
@@ -112,6 +108,7 @@ class OrderResource extends Resource
         return [
             'index' => Pages\ListOrders::route('/'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'view' => Pages\ViewOrder::route('/{record}'),
         ];
     }
 
@@ -121,5 +118,40 @@ class OrderResource extends Resource
             ->whereHas('vendorApplication', function ($query) {
                 $query->where('user_id', auth()->id());
             });
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\TextEntry::make('id')
+                    ->label('Order ID'),
+                Infolists\Components\TextEntry::make('contact_name')
+                    ->label('Customer Name'),
+                Infolists\Components\TextEntry::make('contact_phone')
+                    ->label('Customer Phone'),
+                Infolists\Components\TextEntry::make('user.email')
+                    ->label('Email Address (Authenticated User)'),
+                Infolists\Components\TextEntry::make('delivery_option')
+                    ->label('Delivery Option'),
+                Infolists\Components\TextEntry::make('delivery_address')
+                    ->label('Delivery Address'),
+                Infolists\Components\TextEntry::make('payment_method')
+                    ->label('Payment Method'),
+                    Infolists\Components\TextEntry::make('delivery_charge')
+                    ->label('Delivery Charge')
+                    ->formatStateUsing(fn ($state) => 'CHF ' . number_format($state, 2)), // 💡 change currency if needed
+                Infolists\Components\TextEntry::make('total_price')
+                    ->label('Total Price')
+                    ->formatStateUsing(fn ($state) => 'CHF ' . number_format($state, 2)), // 💡 change currency if needed
+                Infolists\Components\TextEntry::make('expected_receive_time')
+                    ->label('Expected Receive Time')
+                    ->formatStateUsing(fn ($state) => date('M d, Y H:i', strtotime($state))),
+                Infolists\Components\TextEntry::make('special_instructions')
+                    ->label('Special Instructions'),
+                Infolists\Components\TextEntry::make('status')
+                    ->label('Order Status'),
+                
+            ]);
     }
 }

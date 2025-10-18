@@ -33,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'email_verified_at',
         'phone',
         'address',
+        'google_id',
     ];
 
     /**
@@ -87,6 +88,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     public function foods(): HasMany
     {
         return $this->hasMany(Food::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Order::class, 'user_id');
     }
 
     public function vendorApplication(): HasOne
