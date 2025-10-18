@@ -23,6 +23,14 @@
                     </flux:navlist.item>
 
                     <flux:navlist.item 
+                        icon="globe-alt" 
+                        :href="route('landing')" 
+                        :current="request()->routeIs('landing')" 
+                        >
+                        {{ __('Back to Home') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item 
                         icon="shopping-cart" 
                         :href="route('cart.details')" 
                         :current="request()->routeIs('cart.details')" 
@@ -43,6 +51,13 @@
                         :current="request()->routeIs('chat')" 
                         wire:navigate>
                         {{ __('Chat') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item 
+                        icon="user" 
+                        :href="route('account.index')" 
+                        :current="request()->routeIs('account.index')" 
+                        wire:navigate>
+                        {{ __('Upgrade Account') }}
                     </flux:navlist.item>
 
                 </flux:navlist.group>

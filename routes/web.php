@@ -64,6 +64,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+
+    Route::get('account', [App\Http\Controllers\AccountController::class, 'index'])->name('account.index');
+    Route::post('account/upgrade', [App\Http\Controllers\AccountController::class, 'upgradeAccount'])->name('account.upgrade');
 });
 
 require __DIR__.'/auth.php';

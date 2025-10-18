@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationItem;
 
 class VendorPanelProvider extends PanelProvider
 {
@@ -37,6 +38,15 @@ class VendorPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Vendor/Widgets'), for: 'App\\Filament\\Vendor\\Widgets')
             ->widgets([
                // Widgets\AccountWidget::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Back to Website')
+                    ->url('https://homestaurants.com') // 🔗 your link
+                    ->icon('heroicon-o-globe-alt')
+                    ->openUrlInNewTab(), // optional
+                NavigationItem::make('User Dashboard')
+                    ->url('https://homestaurants.com/dashboard')
+                    ->icon('heroicon-o-lifebuoy'),
             ])
             ->middleware([
                 EncryptCookies::class,
